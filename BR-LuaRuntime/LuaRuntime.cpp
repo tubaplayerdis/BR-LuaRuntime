@@ -3,6 +3,8 @@
 #include <LuaBridge/LuaBridge.h>
 #include <BR-SDK.hpp>
 
+#define LUA_MAX_INSTRUCTIONS_PER_TICK 10000
+
 std::wstring to_wstring(const std::string& str);
 DWORD_PTR GetStaticAddressFromVA(PVOID va);
 
@@ -20,7 +22,7 @@ bool IsLuaBrick(SDK::UBrick* Brick)
 {
     auto SI = Brick->GetStaticInfo();
     bool IsLuaBrick = Brick && SI->IsA(SDK::USwitchBrickStaticInfo::StaticClass()) && SI->GetName() == "Default__BP_LuaBrick_C";
-    std::cout << "Lua Brick!\n";
+    std::cout << "Lua Brick!" << std::endl;
     return IsLuaBrick;
 }
 
@@ -58,15 +60,52 @@ void SendUserError(const std::string& errorMessage)
     PC->ClientReceiveChatMessage(Message);
 }
 
-float GetInputChannelValue(int Index)
+namespace InputChannel_RE
 {
-	if (ActiveBrick)
-	{
-		SDK::FVehicleInputChannel InputChannel = ActiveBrick->InputChannel;
-        if (InputChannel.SourceBricks.Num() > Index) return 0.0f;
-        return InputChannel.Value;
-	}
-	return 0.0f;
+    struct FBrickEditorObjectID
+    {
+        unsigned __int16 ID;
+    };
+
+    template<typename T>
+    struct __declspec(align(4)) TBrickEditorObjectPtr
+    {
+        SDK::TWeakObjectPtr<T> Ptr;
+        FBrickEditorObjectID ID;
+    };
+
+    /* 201744 */
+    struct FBrickEditorObjectPtr
+    {
+        TBrickEditorObjectPtr<SDK::UBrickEditorObject> Ptr;
+    };
+
+    float GetInputChannelValue(int Index)
+    {
+        if (ActiveBrick)
+        {
+            SDK::FVehicleInputChannel InputChannel = ActiveBrick->InputChannel;
+            if (Index == -1) return InputChannel.Value;
+            if (InputChannel.SourceBricks.Num() < Index) return 0.0f;
+            {
+                SDK::FBrickEditorObjectPtr Raw = InputChannel.SourceBricks[Index];
+                FBrickEditorObjectPtr* Pointer = reinterpret_cast<FBrickEditorObjectPtr*>(&Raw);
+                SDK::UBrickEditorObject* Obj = Pointer->Ptr.Ptr.Get();
+                if (!Obj) return 0.0f;
+
+                if (Obj->IsA(SDK::UMathBrick::StaticClass()))
+                {
+                    return reinterpret_cast<SDK::UMathBrick*>(Obj)->OutputChannel.CurrentValue;
+                }
+                if (Obj->IsA(SDK::USensorBrickBase::StaticClass()))
+                {
+                    return reinterpret_cast<SDK::USensorBrickBase*>(Obj)->OutputChannel.CurrentValue;
+                }
+                return 0.0f;
+            }
+        }
+        return 0.0f;
+    }
 }
 
 void SetOutputChannelValue(float Value)
@@ -110,7 +149,7 @@ void LuaRuntime::Initialize()
     lua_newtable(L); // sandbox globals table, sits at top of stack
 
     lua_pushcfunction(L, [](lua_State* L) -> int {
-        lua_pushnumber(L, GetInputChannelValue((int)luaL_checkinteger(L, 1)));
+        lua_pushnumber(L, InputChannel_RE::GetInputChannelValue((int)luaL_checkinteger(L, 1)));
         return 1;
         });
     lua_setfield(L, -2, "GetInputChannel");
@@ -179,21 +218,38 @@ static void InstructionLimitHook(lua_State* L, lua_Debug*)
     luaL_error(L, "Script exceeded instruction limit (possible infinite loop)");
 }
 
+void PrintWholeString(std::wstring str)
+{
+    for (wchar_t c : str) std::cout << (int)c << " ";
+        std::cout << "\n";
+}
+
 void AddLuaBrickToRuntime(SDK::USwitchBrick* Brick, SDK::ABrickVehicle* Vehicle)
 {
-    std::string IDOfScript = Brick->SwitchName.ToString();
+    std::wstring ScriptID = Brick->SwitchName.ToWString();
+    if (ScriptID.empty() || ScriptID.find(L'=') == std::string::npos) return;
+
     std::string source = "";
     for (SDK::UBrick* Brick : Vehicle->GetBricks())
     {
-        if (Brick->IsA(SDK::UTextBrick::StaticClass()) && std::to_string((int)reinterpret_cast<UC::int16>(Brick->GetEditorObjectID().Pad_0)) == IDOfScript)
+        if (Brick->IsA(SDK::UTextBrick::StaticClass()))
         {
             auto TextBrick = reinterpret_cast<SDK::UTextBrick*>(Brick);
-            source = TextBrick->Text.ToString();
+            std::wstring TextBrickString = TextBrick->Text.ToWString();
+            if (TextBrickString.empty() || TextBrickString.find(L'\n') == std::string::npos) return;
+            std::wstring TextBrickScriptID = TextBrickString.substr(0, TextBrickString.find(L'\n')-1);//Remove carrige terminator
+            if (ScriptID == TextBrickScriptID)
+            {
+                std::wcout << TextBrickString.substr(TextBrickString.find('\n')+1) << std::endl;
+                source = TextBrick->Text.ToString().substr(TextBrickString.find('\n')+1);
+            }
         }
     }
 
+    if (source.empty()) SendUserError("Failed to find text brick with lua code!");
+
     lua_State* co = lua_newthread(L);
-    lua_sethook(co, InstructionLimitHook, LUA_MASKCOUNT, 1000);
+    lua_sethook(co, InstructionLimitHook, LUA_MASKCOUNT, LUA_MAX_INSTRUCTIONS_PER_TICK);
     luabridge::LuaRef threadRef(L, luabridge::LuaRef::fromStack(L, -1)); // capture the thread as a LuaRef
     lua_pop(L, 1); // LuaRef holds its own ref now, safe to pop L's stack copy
 
@@ -246,10 +302,13 @@ void SetupVehicleLua(SDK::ABrickVehicle* Vehicle)
 void TickLuaBrick(LuaBrick& brick, float DeltaTime)
 {
     if (brick.HasError) return;
+    auto PC = GetBrickPlayerController();
+    if (!PC || PC->PlayerVehicle != brick.Brick->GetVehicle()) return;
 
     luabridge::LuaRef tickFn = brick.EnvRef["Tick"];
     if (!tickFn.isFunction()) return;
 
+    lua_sethook(brick.Coroutine, InstructionLimitHook, LUA_MASKCOUNT, LUA_MAX_INSTRUCTIONS_PER_TICK);
     ActiveBrick = brick.Brick;
     auto result = tickFn(DeltaTime);
     if (result.error())
@@ -291,218 +350,6 @@ Hook<void(SDK::UPlayerInputComponent*, SDK::ABrickVehicle*)> OnPlayerVehicleChan
     }
 });
 
-template<typename T>
-struct TSharedRef
-{
-    T* Object;
-    UC::int8 SharedReferenceCount[0x8];
-};
-
-template<typename T>
-struct TSharedPtr
-{
-    T* Object;
-    UC::int8 SharedReferenceCount[0x8];
-};
-
-template<typename T>
-struct TWeakPtr
-{
-    T* Object;
-    UC::int8 WeakReferenceCount[0x8];
-};
-
-template<typename T>
-struct TSharedFromThis
-{
-    TWeakPtr<T> WeakThis;
-};
-
-const struct FBrickPropertyContainer
-{
-    SDK::UObject *RootObject;
-    SDK::TArray<void *> ContainerChain;
-};
-
-const struct FBrickEditorReferenceResolver
-{
-    SDK::TArray<SDK::UObject *> Objects;
-};
-
-struct FBrickProperty;
-struct FBrickProperty_vtbl
-{
-    SDK::FName *(__fastcall *GetTypeName)(FBrickProperty *This, SDK::FName *result);
-    SDK::FName *(__fastcall *GetValueTypeName)(FBrickProperty *This, SDK::FName *result);
-    bool (__fastcall *IsOfTypeInternal)(FBrickProperty *This, const SDK::FName *);
-    void (__fastcall *GetTypeHierarchyInternal)(FBrickProperty *This, SDK::TArray<SDK::FName> *);
-    void (__fastcall *Destructor_FBrickProperty)(FBrickProperty *This);
-    void (__fastcall *GetTypeHierarchy)(FBrickProperty *This, SDK::TArray<SDK::FName> *);
-    bool (__fastcall *ComparePropertyValues)(FBrickProperty *This, const void *, const void *);
-    bool (__fastcall *IsPropertyNull)(FBrickProperty *This);//Name guessed from the behavior of the function
-    bool (__fastcall *FluppuSpecialSauce1)(FBrickProperty *This, void*, void*);
-    bool (__fastcall *SerializeProperty)(FBrickProperty *This, void* FArchive_Ptr, const FBrickPropertyContainer* Container, UC::int8 Version, const FBrickEditorReferenceResolver*);
-    bool (__fastcall *DoesObjectContainPropertyInternal)(FBrickProperty *This, const SDK::UObject *);
-    bool (__fastcall *GetValueAsText)(FBrickProperty *This, const FBrickPropertyContainer *, SDK::FText *);
-    bool (__fastcall *SetValueAsText)(FBrickProperty *This, const FBrickPropertyContainer *, const SDK::FText *);
-    bool (__fastcall *IsUserText)(FBrickProperty *This);
-    SDK::FString *(__fastcall *ExportProperty)(FBrickProperty *This, SDK::FString *result, const FBrickPropertyContainer *);
-    bool (__fastcall *CanExportProperty)(FBrickProperty *This, const FBrickPropertyContainer *);
-    bool (__fastcall *ImportProperty)(FBrickProperty *This, const FBrickPropertyContainer *, const wchar_t *);
-    bool (__fastcall *CanImportProperty)(FBrickProperty *This, const FBrickPropertyContainer *, const wchar_t *);
-
-    void PrintAddresses()
-    {
-        std::cout << std::hex << std::showbase;
-
-        std::cout << "GetTypeName: "                  << GetStaticAddressFromVA(this->GetTypeName)                  << std::endl;
-        std::cout << "GetValueTypeName: "              << GetStaticAddressFromVA(this->GetValueTypeName)             << std::endl;
-        std::cout << "IsOfTypeInternal: "              << GetStaticAddressFromVA(this->IsOfTypeInternal)             << std::endl;
-        std::cout << "GetTypeHierarchyInternal: "      << GetStaticAddressFromVA(this->GetTypeHierarchyInternal)     << std::endl;
-        std::cout << "Destructor_FBrickProperty: "     << GetStaticAddressFromVA(this->Destructor_FBrickProperty)    << std::endl;
-        std::cout << "GetTypeHierarchy: "              << GetStaticAddressFromVA(this->GetTypeHierarchy)             << std::endl;
-        std::cout << "ComparePropertyValues: "         << GetStaticAddressFromVA(this->ComparePropertyValues)        << std::endl;
-        std::cout << "IsPropertyNull: "                << GetStaticAddressFromVA(this->IsPropertyNull)    << std::endl;
-        std::cout << "FluppiSauce1: "                  << GetStaticAddressFromVA(this->FluppuSpecialSauce1)    << std::endl;
-        std::cout << "SerializeProperty: "             << GetStaticAddressFromVA(this->SerializeProperty)            << std::endl;
-        std::cout << "DoesObjectContainPropertyInternal: " << GetStaticAddressFromVA(this->DoesObjectContainPropertyInternal) << std::endl;
-        std::cout << "GetValueAsText: "                << GetStaticAddressFromVA(this->GetValueAsText)               << std::endl;
-        std::cout << "SetValueAsText: "                << GetStaticAddressFromVA(this->SetValueAsText)               << std::endl;
-        std::cout << "IsUserText: "                    << GetStaticAddressFromVA(this->IsUserText)                   << std::endl;
-        std::cout << "ExportProperty: "                << GetStaticAddressFromVA(this->ExportProperty)               << std::endl;
-        std::cout << "CanExportProperty: "             << GetStaticAddressFromVA(this->CanExportProperty)            << std::endl;
-        std::cout << "ImportProperty: "                << GetStaticAddressFromVA(this->ImportProperty)               << std::endl;
-        std::cout << "CanImportProperty: "             << GetStaticAddressFromVA(this->CanImportProperty)            << std::endl;
-
-        std::cout << std::dec; // reset stream state if you print anything decimal afterward
-    }
-};
-
-struct FBrickProperty
-{
-    FBrickProperty_vtbl* VTable;
-    SDK::FProperty* Property;
-    SDK::FName PropertyName;
-};
-
-struct __declspec(align(2)) FTextBrickProperty : FBrickProperty
-{
-  /*const*/ int MaxTextLength;
-  /*const*/ bool bIsPassword;
-  /*const*/ bool bAllowMultiLine;
-  /*const*/ bool bIsUserText;
-  UC::int8 Pad_0[0x9];
-};
-static_assert(sizeof(FTextBrickProperty) == 0x28);
-
-struct FBrickPropertyCategory
-{
-    SDK::FText DisplayName;
-};
-
-struct FBrickPropertyInstance
-{
-    TSharedRef<FBrickProperty> BrickProperty;
-    SDK::FString FullPropertyName;
-    SDK::TArray<SDK::FStructProperty> ParentPropertyChain;
-};
-static_assert(sizeof(FBrickPropertyInstance) == 0x30);
-
-const struct __declspec(align(8)) FBrickPropertyChangedEvent
-{
-    SDK::TWeakObjectPtr<SDK::ABasePlayerController> Player;
-    SDK::FString FullPropertyName;
-    SDK::TArray<SDK::FName> PropertyChain;
-    int PropertyChainDepth;
-    SDK::TArray<SDK::TWeakObjectPtr<SDK::UObject>> Objects;
-    SDK::TWeakObjectPtr<SDK::UObject> ActiveObject;
-    SDK::EValueChangedEventType EventType[1];
-    bool bExternalChange;
-    bool bUpdateAllProperties;
-};
-
-const struct __declspec(align(8)) FBrickPropertyEditInfo : FBrickPropertyInstance, TSharedFromThis<FBrickPropertyEditInfo>
-{
-    SDK::FText DisplayName;
-    SDK::FText DescriptionText;
-    SDK::TArray<SDK::TWeakObjectPtr<SDK::UObject>> ContainerObjects;
-    bool bIsEnabled;
-    bool bIsReadOnly;
-    SDK::EBrickUIColorStyle ColorStyle[1];
-    SDK::uint8 pad_0[1];
-    int MaxComboBoxListItems;
-    int MaxComboBoxItemsPerRow;
-    SDK::uint8 pad_1[4];
-    TSharedPtr<FBrickPropertyChangedEvent> PendingChangedEvent;
-    SDK::TOptional<std::byte> OrientationOverride;
-    SDK::uint8 pad_2[6];
-};
-static_assert(sizeof(FBrickPropertyEditInfo) == 0xA8);
-
-struct FBrickPropertyReflection
-{
-    bool bIsSerializing;
-    SDK::uint8 pad_0[7];
-    SDK::TArray<SDK::TWeakObjectPtr<SDK::UObject>> ContainerObjects;
-    SDK::FBrickPropertyReflectionFilter Filter;
-    void* SomethingFluppiAdded;
-    SDK::TArray<FBrickPropertyInstance> BrickProperties;
-    SDK::TArray<SDK::TPair<TSharedRef<FBrickPropertyEditInfo>, int>> BrickPropertyEditInfos;
-    SDK::TArray<FBrickPropertyCategory> Categories;
-    int CurrentCategoryIndex;
-    SDK::uint8 pad_1[4];
-    SDK::TArray<SDK::FStructProperty*> ParentPropertyChain;
-};
-static_assert(sizeof(FBrickPropertyReflection) == 0x88);
-static_assert(offsetof(FBrickPropertyReflection, BrickPropertyEditInfos) == 0x50);
-
-Hook<void(SDK::USwitchBrick* This, FBrickPropertyReflection* Params)> USwitchBrick_ReflectPropertiesHook("40 55 53 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 F8 48 81 EC 08 01 00 00 45",
-[](SDK::USwitchBrick* This, FBrickPropertyReflection* Params) -> void
-{
-    USwitchBrick_ReflectPropertiesHook.CallOriginalFunction(This, Params);
-    auto Props = Params->BrickProperties;
-    std::cout << Props.Num() << " " << Props.Max() << std::endl;
-    static SDK::FString FTextBrickPropertyStringType = SDK::FString(L"FTextBrickProperty");
-    static SDK::FName FTextBrickPropertyNameType = SDK::UKismetStringLibrary::Conv_StringToName(FTextBrickPropertyStringType);
-    static SDK::FString SwitchNameStringType = SDK::FString(L"SwitchName");
-    static SDK::FName SwitchNameNameType = SDK::UKismetStringLibrary::Conv_StringToName(SwitchNameStringType);
-    for (int i = 0; i < Props.Num(); i++)
-    {
-        FBrickPropertyInstance PropertyInstance = Props[i];
-        if (PropertyInstance.BrickProperty.Object)
-        {
-            auto BrickProperty = PropertyInstance.BrickProperty.Object;
-            if (BrickProperty->VTable->IsOfTypeInternal(BrickProperty, &FTextBrickPropertyNameType))
-            {
-                std::cout << "Is FTextBrickProperty" << std::endl;
-                auto TextBrickProperty = reinterpret_cast<FTextBrickProperty*>(BrickProperty);
-                if (TextBrickProperty->PropertyName == SwitchNameNameType)
-                {
-                    //TextBrickProperty->VTable->PrintAddresses();
-                    //TextBrickProperty->bAllowMultiLine = true;
-                    //TextBrickProperty->MaxTextLength = 32767;
-                }
-            }
-        }
-        std::cout << PropertyInstance.FullPropertyName.ToString() << std::endl;
-    }
-});
-
-Hook<bool(FTextBrickProperty *This, void* FArchive_Ptr, const FBrickPropertyContainer* Container, UC::int8 Version, const FBrickEditorReferenceResolver* Res)> FTextBrickProperty_SerializePropertyHook("48 8B C4 53 48 83 EC 40 48 89 68 08 48 8B DA 48 89 70 10 48",
-    [](FTextBrickProperty *This, void* FArchive_Ptr, const FBrickPropertyContainer* Container, UC::int8 Version, const FBrickEditorReferenceResolver* Res) -> bool
-    {
-        static SDK::FString SwitchNameStringType1 = SDK::FString(L"SwitchName");
-        static SDK::FName SwitchNameNameType1 = SDK::UKismetStringLibrary::Conv_StringToName(SwitchNameStringType1);
-        std::cout << "BRUH" << This->PropertyName.GetRawString() << std::endl;
-        if (This->PropertyName == SwitchNameNameType1)
-        {
-            This->bAllowMultiLine = true;
-            This->MaxTextLength = 32767;
-            std::cout << "Activated" << std::endl;
-        }
-        return FTextBrickProperty_SerializePropertyHook.CallOriginalFunction(This, FArchive_Ptr, Container, Version, Res);
-    });
-
 void CreateEnableHooks()
 {
     SwitchBrick_TickBrickHook.Create();
@@ -510,12 +357,6 @@ void CreateEnableHooks()
 
     OnPlayerVehicleChangedHook.Create();
     OnPlayerVehicleChangedHook.Enable();
-
-    //USwitchBrick_ReflectPropertiesHook.Create();
-    //USwitchBrick_ReflectPropertiesHook.Enable();
-
-    //FTextBrickProperty_SerializePropertyHook.Create();
-    //FTextBrickProperty_SerializePropertyHook.Enable();
 }
 
 void DisableDestroyHooks()
@@ -525,12 +366,6 @@ void DisableDestroyHooks()
 
     OnPlayerVehicleChangedHook.Disable();
     OnPlayerVehicleChangedHook.Destroy();
-
-    //USwitchBrick_ReflectPropertiesHook.Disable();
-    //USwitchBrick_ReflectPropertiesHook.Destroy();
-
-    //FTextBrickProperty_SerializePropertyHook.Disable();
-    //FTextBrickProperty_SerializePropertyHook.Destroy();
 }
 
 /*

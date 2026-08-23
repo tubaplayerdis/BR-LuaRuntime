@@ -194,6 +194,7 @@
     <ClCompile Include="..\Include\Lua\lzio.c" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="exception_handler.cpp" />
+    <ClCompile Include="FBrickProperty_Reverse.cpp" />
     <ClCompile Include="LuaRuntime.cpp" />
   </ItemGroup>
   <ItemGroup>
