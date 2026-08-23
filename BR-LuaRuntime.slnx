@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="BR-LuaRuntime/BR-LuaRuntime.vcxproj" Id="c7d5cf17-b1e3-473f-8765-298c359005c6" />
+</Solution>
