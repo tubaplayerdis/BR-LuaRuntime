@@ -39,7 +39,7 @@ Use `-1` to get the value of the input channel of this Brick (vanilla behavior)
 
 ### `SetOutChannelVal(Value)`
 
-Sets the value of this Brick's output channel
+Sets the value of this bricks output channel
 
 **Parameters:**
 *   `Value` (**number**): The value to set the output channel to
