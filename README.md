@@ -47,4 +47,4 @@ Use a Execution Module by setting `=ModuleName` as the Switch Name of your Switc
  - There is a limit of 10,000 operations per tick.
  - Persistent values should be stored by setting other SwitchBrick output and input channels (Storage API).
 
-READ THE [API.MD](API REFERENCE)
+READ THE [API REFERENCE](API.MDE)
