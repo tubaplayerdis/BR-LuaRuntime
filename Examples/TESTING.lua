@@ -3,6 +3,7 @@
 
 local MathLib = require("MathLib")
 
+--This function HAS to be implemented globally in Execution modules
 function Tick(Delta)
 	local X = GetInChannelVal(0) --Reads the bound brick on index 0 output channel value
 	local Z = GetInChannelVal(1) --Reads the bound brick on index 1 output channel value
@@ -15,6 +16,7 @@ function Tick(Delta)
 	print(LastDeltaTime)
 end
 
+--This function HAS to be implemented globally in Execution modules
 function Interact(Value)
 	print(Value)
 end

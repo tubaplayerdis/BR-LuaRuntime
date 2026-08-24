@@ -1,3 +1,8 @@
+--=StorageBrick
+-- Include the above at the top of your TextBrick text, without the comment prefix "--"
+
+--This is an API abstraction over the standard BR-Lua functions.
+
 local StorageBrick = {}
 
 function StorageBrick:new(SwitchName)
@@ -5,8 +10,6 @@ function StorageBrick:new(SwitchName)
     setmetatable(instance, self)
     return instance
 end
-
---TODO: Implement these functions. Also might be able to provide an OOP abstraction over the pure functional API for Input and Output Channels
 
 function StorageBrick:StoreValue(Value)
     SetInChannelValNamed(self.SwitchName, Value)
