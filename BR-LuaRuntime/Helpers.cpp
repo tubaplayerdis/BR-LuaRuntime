@@ -33,11 +33,21 @@ void Helpers::SendUserError(const std::string& errorMessage)
     Message.TextOption = SDK::UKismetTextLibrary::Conv_StringToText(ErrorString);
     Message.Player.PlayerName = UC::FString(L"Lua");
     Message.Type = SDK::EChatMessageType::Message;
-    auto GameState = SDK::ABrickGameState::Get(SDK::UWorld::GetWorld());//World is valid since PC is valid
-    if (GameState->GetDefaultTeam())
-    {
-        Message.TeamOption = GameState->GetDefaultTeam()->GetTeamId();
-    }
+    PC->ClientReceiveChatMessage(Message);
+}
+
+void Helpers::SendUserError(const std::wstring& context, const std::string& errorMessage)
+{
+    auto PC = GetBrickPlayerController();
+    if (!PC) return;
+    SDK::FBrickChatMessage Message;
+    FBrickChatMessageConstructor(&Message, SDK::EChatMessageType::Message, PC);
+    std::wstring ErrorWString = to_wstring(errorMessage);
+    SDK::FString ErrorString(ErrorWString.c_str());
+    std::wstring PlayerContext = L"Lua (" + context + L")";
+    Message.TextOption = SDK::UKismetTextLibrary::Conv_StringToText(ErrorString);
+    Message.Player.PlayerName = UC::FString(PlayerContext.c_str());
+    Message.Type = SDK::EChatMessageType::Message;
     PC->ClientReceiveChatMessage(Message);
 }
 
@@ -67,6 +77,7 @@ std::string Helpers::FindModuleSource(SDK::ABrickVehicle* Vehicle, const std::st
         if (!Brick->IsA(SDK::UTextBrick::StaticClass())) continue;
         auto TextBrick = reinterpret_cast<SDK::UTextBrick*>(Brick);
         std::string BrickText = TextBrick->Text.ToString();
+        if (!BrickText.starts_with('=')) continue;
         std::wstring text = Helpers::to_wstring(BrickText);
         size_t nl = text.find(L'\n');
         size_t eq = text.find(L'=');

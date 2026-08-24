@@ -4,9 +4,15 @@
 namespace BrickAPI
 {
     void SetActiveBrick(SDK::USwitchBrick* Brick);
+    SDK::USwitchBrick* GetActiveBrick();
 
     float GetInputChannelValue(int Index);
     void SetInputChannelValue(int Index, float Value);
     void SetOutputChannelValue(float Value);
     float GetOutputChannelValue();
+
+    void ClearSwitchBrickRegistry();
+    void RegisterSwitchBrick(SDK::USwitchBrick* Brick);
+    float GetInputChannelValueNamed(const char* Name);
+    void SetInputChannelValueNamed(const char* Name, float Value);
 }

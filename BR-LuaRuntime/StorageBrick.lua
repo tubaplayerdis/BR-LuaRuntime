@@ -9,11 +9,11 @@ end
 --TODO: Implement these functions. Also might be able to provide an OOP abstraction over the pure functional API for Input and Output Channels
 
 function StorageBrick:StoreValue(Value)
-    SetInChannelVal_Named(self.SwitchName, Value)
+    SetInChannelValNamed(self.SwitchName, Value)
 end
 
 function StorageBrick:GetValue(Value)
-    return GetInChannelVal_Named(self.SwitchName)
+    return GetInChannelValNamed(self.SwitchName)
 end
 
 return StorageBrick

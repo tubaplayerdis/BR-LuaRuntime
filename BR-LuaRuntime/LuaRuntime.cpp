@@ -134,6 +134,20 @@ void LuaRuntime::Initialize()
     });
     lua_setfield(L, -2, "GetOutChannelVal");
 
+    lua_pushcfunction(L, [](lua_State* L) -> int
+    {
+        BrickAPI::SetInputChannelValueNamed(luaL_checklstring(L, 1, nullptr), luaL_checknumber(L, 2));
+        return 0;
+    });
+    lua_setfield(L, -2, "SetInChannelValNamed");
+
+    lua_pushcfunction(L, [](lua_State* L) -> int
+    {
+        lua_pushnumber(L, BrickAPI::GetInputChannelValueNamed(luaL_checklstring(L, 1, nullptr)));
+        return 1;
+    });
+    lua_setfield(L, -2, "GetInChannelValNamed");
+
     lua_pushcfunction(L, Lua_Require);
     lua_setfield(L, -2, "require");
 
@@ -177,6 +191,29 @@ void LuaRuntime::Shutdown()
     LuaBricks.clear();
     BrickByState.clear();
     if (L) { lua_close(L); L = nullptr; }
+}
+
+lua_State* LastCallingState = nullptr;
+
+void SetLastCallingState(lua_State* L)
+{
+    LastCallingState = L;
+}
+
+void LuaRuntime::RaiseLuaException(std::string const& message)
+{
+    SDK::USwitchBrick* Active = BrickAPI::GetActiveBrick();
+    std::wstring ErrorContext = L"";
+    if (Active)
+    {
+        ErrorContext = Active->SwitchName.ToWString();
+    }
+
+    std::wcout << ErrorContext.c_str() << std::endl;
+    Helpers::SendUserError(ErrorContext, message);
+    
+    if (LastCallingState == nullptr) return;
+    luaL_error(LastCallingState, "%s", message.c_str());
 }
 
 static int Lua_ProtectApiNames(lua_State* L)
@@ -262,10 +299,15 @@ void SetupVehicleLua(SDK::ABrickVehicle* Vehicle)
     }
     LuaBricks.clear();
     g_LoadedModules.clear();
+    BrickAPI::ClearSwitchBrickRegistry();
 
 	// Setup Lua environment for the vehicle, load scripts, etc.
     for (SDK::UBrick* SwitchBrick : Vehicle->GetBricks()) // adjust to actual accessor
     {
+        if (SwitchBrick->IsA(SDK::USwitchBrick::StaticClass()))
+        {
+            BrickAPI::RegisterSwitchBrick(reinterpret_cast<SDK::USwitchBrick*>(SwitchBrick));
+        }
         if (!Helpers::IsLuaBrick(SwitchBrick)) continue;
         AddLuaBrickToRuntime(reinterpret_cast<SDK::USwitchBrick*>(SwitchBrick), Vehicle);
     }
@@ -282,6 +324,7 @@ void TickLuaBrick(LuaBrick& brick, float DeltaTime)
 
     lua_sethook(brick.Coroutine, InstructionLimitHook, LUA_MASKCOUNT, LUA_MAX_INSTRUCTIONS_PER_TICK);
     BrickAPI::SetActiveBrick(brick.Brick);
+    SetLastCallingState(brick.Coroutine);
     auto result = tickFn(DeltaTime);
     if (result.error())
     {
@@ -301,6 +344,7 @@ void InteractLuaBrick(LuaBrick& brick, UC::uint8 Value)
 
     lua_sethook(brick.Coroutine, InstructionLimitHook, LUA_MASKCOUNT, LUA_MAX_INSTRUCTIONS_PER_TICK);
     BrickAPI::SetActiveBrick(brick.Brick);
+    SetLastCallingState(brick.Coroutine);
     auto result = tickFn(Value);
     if (result.error())
     {
@@ -367,7 +411,7 @@ Hook<void(SDK::ABrickPlayerController*, SDK::USwitchBrick*, int NewValue)> ABric
 Hook<void(SDK::ABrickPlayerController*, SDK::FPlayerSpawnRequest*)> ABrickPlayerController_RestartAtHook("48 89 5C 24 08 48 89 74 24 10 55 57 41 56 48 8D 6C 24 B0",
     [](SDK::ABrickPlayerController* This, SDK::FPlayerSpawnRequest* SpawnRequest) -> void
     {
-        VehicleAPI::SetActiveVehicle(nullptr);//Invalidate to cause reload of lua
+        if (This == Helpers::GetBrickPlayerController()) VehicleAPI::SetActiveVehicle(nullptr);//Invalidate to cause reload of lua
         ABrickPlayerController_RestartAtHook.CallOriginalFunction(This, SpawnRequest);
     });
 
