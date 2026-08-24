@@ -1,8 +1,19 @@
 #include "LuaRuntime.hpp"
+#include <Lua/lua.hpp>
+#include <LuaBridge/LuaBridge.h>
+#include <BR-SDK.hpp>
 #include "BrickAPI.hpp"
 #include "Helpers.hpp"
+#include "VehicleAPI.hpp"
 
-#define LUA_MAX_INSTRUCTIONS_PER_TICK 10000
+struct LuaBrick
+{
+    lua_State* Coroutine;                // raw pointer for fast lookup/dispatch
+    luabridge::LuaRef ThreadRef;         // keeps the coroutine alive (was: int threadRef + luaL_ref/unref)
+    luabridge::LuaRef EnvRef;            // this brick's private _ENV table
+    SDK::USwitchBrick* Brick;
+    bool HasError = false;
+};
 
 lua_State* L = nullptr;
 std::unordered_map<SDK::USwitchBrick*, LuaBrick> LuaBricks;       // owns the contexts, node-stable
@@ -95,17 +106,33 @@ void LuaRuntime::Initialize()
     // real stdlib globals — this becomes every brick's __index fallback.
     lua_newtable(L); // sandbox globals table, sits at top of stack
 
-    lua_pushcfunction(L, [](lua_State* L) -> int {
+    lua_pushcfunction(L, [](lua_State* L) -> int
+    {
         lua_pushnumber(L, BrickAPI::GetInputChannelValue((int)luaL_checkinteger(L, 1)));
         return 1;
-        });
+    });
     lua_setfield(L, -2, "GetInChannelVal");
 
-    lua_pushcfunction(L, [](lua_State* L) -> int {
+    lua_pushcfunction(L, [](lua_State* L) -> int
+    {
         BrickAPI::SetOutputChannelValue((float)luaL_checknumber(L, 1));
         return 0;
-        });
+    });
     lua_setfield(L, -2, "SetOutChannelVal");
+
+    lua_pushcfunction(L, [](lua_State* L) -> int
+    {
+        BrickAPI::SetInputChannelValue((int)luaL_checknumber(L, 1), (float)luaL_checknumber(L, 2));
+        return 0;
+    });
+    lua_setfield(L, -2, "SetInChannelVal");
+
+    lua_pushcfunction(L, [](lua_State* L) -> int
+    {
+        lua_pushnumber(L, BrickAPI::GetOutputChannelValue());
+        return 1;
+    });
+    lua_setfield(L, -2, "GetOutChannelVal");
 
     lua_pushcfunction(L, Lua_Require);
     lua_setfield(L, -2, "require");
@@ -128,13 +155,6 @@ void LuaRuntime::Initialize()
         lua_getglobal(L, name);
         lua_setfield(L, -2, name);
     }
-
-    /*
-     * Add functions and other BS
-     */
-    luabridge::getGlobalNamespace(L)
-        .addFunction("SetInChannelVal", BrickAPI::SetInputChannelValue)
-        .addFunction("GetOutChannelVal", BrickAPI::GetOutputChannelValue);
 
     g_SandboxGlobals = new luabridge::LuaRef(luabridge::LuaRef::fromStack(L, -1));
     lua_pop(L, 1);
@@ -235,6 +255,14 @@ void AddLuaBrickToRuntime(SDK::USwitchBrick* Brick, SDK::ABrickVehicle* Vehicle)
 
 void SetupVehicleLua(SDK::ABrickVehicle* Vehicle)
 {
+    //Remove old variables, scripts etc
+    for (auto& [brickPtr, brick] : LuaBricks)
+    {
+        BrickByState.erase(brick.Coroutine);
+    }
+    LuaBricks.clear();
+    g_LoadedModules.clear();
+
 	// Setup Lua environment for the vehicle, load scripts, etc.
     for (SDK::UBrick* SwitchBrick : Vehicle->GetBricks()) // adjust to actual accessor
     {
@@ -262,46 +290,97 @@ void TickLuaBrick(LuaBrick& brick, float DeltaTime)
     }
 }
 
+void InteractLuaBrick(LuaBrick& brick, UC::uint8 Value)
+{
+    if (brick.HasError) return;
+    auto PC = Helpers::GetBrickPlayerController();
+    if (!PC || PC->PlayerVehicle != brick.Brick->GetVehicle()) return;
+
+    luabridge::LuaRef tickFn = brick.EnvRef["Interact"];
+    if (!tickFn.isFunction()) return;
+
+    lua_sethook(brick.Coroutine, InstructionLimitHook, LUA_MASKCOUNT, LUA_MAX_INSTRUCTIONS_PER_TICK);
+    BrickAPI::SetActiveBrick(brick.Brick);
+    auto result = tickFn(Value);
+    if (result.error())
+    {
+        Helpers::SendUserError(result.message());
+        brick.HasError = true;
+    }
+}
+
 Hook<void(SDK::USwitchBrick*, float)> SwitchBrick_TickBrickHook("80 B9 ?? 01 00 00 ?? 74 ?? B2 ?? E9 ?? ?? ?? ?? C3",
 [](SDK::USwitchBrick* This, float DeltaTime) -> void
 {
+    auto PC = Helpers::GetBrickPlayerController();
+    auto Veh = This->GetVehicle();
+
+    if (!VehicleAPI::Valid(PC, Veh))
+    {
+        SwitchBrick_TickBrickHook.CallOriginalFunction(This, DeltaTime);
+        return;
+    }
+
+    if (VehicleAPI::SetActiveVehicle(Veh))
+    {
+        SetupVehicleLua(This->GetVehicle());
+    }
+
+    SwitchBrick_TickBrickHook.CallOriginalFunction(This, DeltaTime);
+
+    if (This->IsBrickDamaged()) return;
+
     auto it = LuaBricks.find(This);
     if (it != LuaBricks.end())
     {
         TickLuaBrick(it->second, DeltaTime);
         return;
     }
-
-    SwitchBrick_TickBrickHook.CallOriginalFunction(This, DeltaTime);
 });
 
-Hook<void(SDK::UPlayerInputComponent*, SDK::ABrickVehicle*)> OnPlayerVehicleChangedHook("40 53 48 83 EC ?? F6 81 ?? 00 00 00 ?? 48 8B D9 74 ?? E8 ?? ?? ?? ?? 48 8B CB",
-[](SDK::UPlayerInputComponent* This, SDK::ABrickVehicle* Vehicle) -> void
-{
-    OnPlayerVehicleChangedHook.CallOriginalFunction(This, Vehicle);
-    if (Helpers::GetBrickPlayerController() && Helpers::GetBrickPlayerController()->PlayerVehicle && Vehicle == Helpers::GetBrickPlayerController()->PlayerVehicle)
+Hook<void(SDK::ABrickPlayerController*, SDK::USwitchBrick*, int NewValue)> ABrickPlayerController_SetSwitchBrickValueHook("48 85 D2 0F 84 A0 00 00 00 48 89 5C",
+    [](SDK::ABrickPlayerController* This, SDK::USwitchBrick* SwitchBrick, int NewValue) -> void
     {
-        for (auto& [brickPtr, brick] : LuaBricks)
-        {
-            BrickByState.erase(brick.Coroutine);
-        }
-        LuaBricks.clear();
-        g_LoadedModules.clear();
+        auto PC = Helpers::GetBrickPlayerController();
+        auto Veh = SwitchBrick->GetVehicle();
 
-        if (Vehicle)
+        if (!VehicleAPI::Valid(PC, Veh))
         {
-            SetupVehicleLua(Vehicle);
+            ABrickPlayerController_SetSwitchBrickValueHook.CallOriginalFunction(This, SwitchBrick, NewValue);
+            return;
         }
-    }
-});
+
+        if (VehicleAPI::SetActiveVehicle(Veh))
+        {
+            SetupVehicleLua(SwitchBrick->GetVehicle());
+        }
+
+        ABrickPlayerController_SetSwitchBrickValueHook.CallOriginalFunction(This, SwitchBrick, NewValue);
+
+        auto it = LuaBricks.find(SwitchBrick);
+        if (it != LuaBricks.end())
+        {
+            InteractLuaBrick(it->second, static_cast<UC::int8>(NewValue));
+        }
+    });
+
+Hook<void(SDK::ABrickPlayerController*, SDK::FPlayerSpawnRequest*)> ABrickPlayerController_RestartAtHook("48 89 5C 24 08 48 89 74 24 10 55 57 41 56 48 8D 6C 24 B0",
+    [](SDK::ABrickPlayerController* This, SDK::FPlayerSpawnRequest* SpawnRequest) -> void
+    {
+        VehicleAPI::SetActiveVehicle(nullptr);//Invalidate to cause reload of lua
+        ABrickPlayerController_RestartAtHook.CallOriginalFunction(This, SpawnRequest);
+    });
 
 void CreateEnableHooks()
 {
     SwitchBrick_TickBrickHook.Create();
     SwitchBrick_TickBrickHook.Enable();
 
-    OnPlayerVehicleChangedHook.Create();
-    OnPlayerVehicleChangedHook.Enable();
+    ABrickPlayerController_SetSwitchBrickValueHook.Create();
+    ABrickPlayerController_SetSwitchBrickValueHook.Enable();
+
+    ABrickPlayerController_RestartAtHook.Create();
+    ABrickPlayerController_RestartAtHook.Enable();
 }
 
 void DisableDestroyHooks()
@@ -309,6 +388,9 @@ void DisableDestroyHooks()
     SwitchBrick_TickBrickHook.Disable();
     SwitchBrick_TickBrickHook.Destroy();
 
-    OnPlayerVehicleChangedHook.Disable();
-    OnPlayerVehicleChangedHook.Destroy();
+    ABrickPlayerController_SetSwitchBrickValueHook.Disable();
+    ABrickPlayerController_SetSwitchBrickValueHook.Destroy();
+
+    ABrickPlayerController_RestartAtHook.Disable();
+    ABrickPlayerController_RestartAtHook.Destroy();
 }

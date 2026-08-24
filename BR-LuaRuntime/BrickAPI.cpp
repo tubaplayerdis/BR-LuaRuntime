@@ -65,7 +65,7 @@ void BrickAPI::SetInputChannelValue(int Index, float Value)
             InputChannel.Value = Value;
             return;
         }
-        if (InputChannel.SourceBricks.Num() < Index) return;
+        if (InputChannel.SourceBricks.Num() <= Index) return;
         {
             SDK::FBrickEditorObjectPtr Raw = InputChannel.SourceBricks[Index];
             FBrickEditorObjectPtr* Pointer = reinterpret_cast<FBrickEditorObjectPtr*>(&Raw);

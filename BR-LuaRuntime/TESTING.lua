@@ -7,3 +7,7 @@ function Tick(Delta)
 	print("Z" .. Z)
 	SetOutChannelVal(Delta * MathLib.PI)
 end
+
+function Interact(Value)
+	print(Value)
+end

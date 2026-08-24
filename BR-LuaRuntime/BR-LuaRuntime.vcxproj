@@ -198,17 +198,20 @@
     <ClCompile Include="FBrickProperty_Reverse.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="LuaRuntime.cpp" />
+    <ClCompile Include="VehicleAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BrickAPI.hpp" />
     <ClInclude Include="Helpers.hpp" />
     <ClInclude Include="LuaRuntime.hpp" />
+    <ClInclude Include="VehicleAPI.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="TESTING.lua" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="MathLib.lua" />
+    <Content Include="StorageBrick.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
