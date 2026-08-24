@@ -3,28 +3,8 @@
 #include <windows.h>
 #include <Hooking/MinHook/MinHook.h>
 #include <BR-SDK.hpp>
+
 #include "LuaRuntime.hpp"
-
-/*
-* HOW 2 ADD LUA TO Brick Rigs?
-* 
-* 1. Find a viable brick type to use as a base for a lua brick. It needs string input and ability to read multiple input channels and an output. - Done
-* 2. Have a custom static info type with BRMK. That will be the starting point for our mod. - Done
-* 3. Override the beginplay, brick tick and the should brick tick for all switch bricks.
-* 4. Have a global lua state for the client.
-* 5. Configure global lua state with bindings to get input and output.
-* 6. Execute lua strings of bricks on tick with the context of the brick pointer being changed for each brick.
-*/
-
-/*
-* Lua code - string
-* inputs
-* output 
-*/
-
-/*
-* 
-*/
 
 //Global variables
 HMODULE self = nullptr;
@@ -42,7 +22,6 @@ DWORD WINAPI UnloadThread(LPVOID lpParam) {
     FreeLibraryAndExitThread(self, 0);
 }
 
-
 DWORD WINAPI MainThread(LPVOID lpReserved)
 {
     HMODULE hModule = static_cast<HMODULE>(lpReserved);
@@ -53,12 +32,19 @@ DWORD WINAPI MainThread(LPVOID lpReserved)
     freopen_s(&pStdIn, "CONIN$", "r", stdin);
     freopen_s(&pStdOut, "CONOUT$", "w", stdout);
     freopen_s(&pStdErr, "CONOUT$", "w", stderr);
-    SetConsoleTitleW(L"Brick Rigs Lua Runtime - Debug");
+    SetConsoleTitleW(L"Brick Rigs Lua Runtime - Developer");
     SetConsoleOutputCP(CP_UTF8);
 #endif // _DEBUG
 
     MH_Initialize(); //Initalize MinHook
 	LuaRuntime::Initialize(); //Initalize Lua Runtime
+
+#ifdef _DEBUG
+
+    std::cout << "Brick Rigs Lua Runtime - American_Stig (tbgit) @Discord" << std::endl;
+    std::cout << "API Reference: " << "https://github.com/tubaplayerdis/BR-LuaRuntime" << std::endl;
+    std::cout << "Lua runtime will cause FREEZES Sometimes - Press ENTER to fix" << std::endl;
+    std::cout << "Lua runtime is in developer mode - Press F6 to uninject" << std::endl;
 
     while (true)
     {
@@ -68,10 +54,10 @@ DWORD WINAPI MainThread(LPVOID lpReserved)
             return 0;
         }
 
-		Sleep(100);
+		Sleep(10);
     }
+#endif
 
-    
     return 0;
 }
 
@@ -111,13 +97,4 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID)
         CleanUp(self);
     }
     return TRUE;
-}
-
-std::wstring to_wstring(const std::string& str)
-{
-    int size_needed = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, nullptr, 0);
-    std::wstring wstr(size_needed, 0);
-    MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, &wstr[0], size_needed);
-    wstr.pop_back(); // remove null terminator
-    return wstr;
 }

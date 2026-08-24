@@ -192,16 +192,23 @@
     <ClCompile Include="..\Include\Lua\lutf8lib.c" />
     <ClCompile Include="..\Include\Lua\lvm.c" />
     <ClCompile Include="..\Include\Lua\lzio.c" />
+    <ClCompile Include="BrickAPI.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="exception_handler.cpp" />
     <ClCompile Include="FBrickProperty_Reverse.cpp" />
+    <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="LuaRuntime.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BrickAPI.hpp" />
+    <ClInclude Include="Helpers.hpp" />
     <ClInclude Include="LuaRuntime.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="example.lua" />
+    <None Include="TESTING.lua" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MathLib.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,117 +1,64 @@
 #include "LuaRuntime.hpp"
-#include <Lua/lua.hpp>
-#include <LuaBridge/LuaBridge.h>
-#include <BR-SDK.hpp>
+#include "BrickAPI.hpp"
+#include "Helpers.hpp"
 
 #define LUA_MAX_INSTRUCTIONS_PER_TICK 10000
 
-std::wstring to_wstring(const std::string& str);
-DWORD_PTR GetStaticAddressFromVA(PVOID va);
-
-SDK::ABrickPlayerController* GetBrickPlayerController()
-{
-	SDK::APlayerController* PlayerController = SDK::UGameplayStatics::GetPlayerController(SDK::UWorld::GetWorld(), 0);
-	if (PlayerController)
-	{
-		return static_cast<SDK::ABrickPlayerController*>(PlayerController);
-	}
-	return nullptr;
-}
-
-bool IsLuaBrick(SDK::UBrick* Brick)
-{
-    auto SI = Brick->GetStaticInfo();
-    bool IsLuaBrick = Brick && SI->IsA(SDK::USwitchBrickStaticInfo::StaticClass()) && SI->GetName() == "Default__BP_LuaBrick_C";
-    std::cout << "Lua Brick!" << std::endl;
-    return IsLuaBrick;
-}
-
 lua_State* L = nullptr;
-
-struct LuaBrick
-{
-    lua_State* Coroutine;                // raw pointer for fast lookup/dispatch
-    luabridge::LuaRef ThreadRef;         // keeps the coroutine alive (was: int threadRef + luaL_ref/unref)
-    luabridge::LuaRef EnvRef;            // this brick's private _ENV table
-    SDK::USwitchBrick* Brick;
-    bool HasError = false;
-};
-SDK::USwitchBrick* ActiveBrick = nullptr;
-
 std::unordered_map<SDK::USwitchBrick*, LuaBrick> LuaBricks;       // owns the contexts, node-stable
 std::unordered_map<lua_State*, SDK::USwitchBrick*> BrickByState;  // lua_State* -> brick key, for API lookups
 luabridge::LuaRef* g_ApiTable; // shared read-only API, backing every brick's __index
 luabridge::LuaRef* g_SandboxGlobals = nullptr;
+std::unordered_map<std::string, luabridge::LuaRef> g_LoadedModules;
 
 void CreateEnableHooks();//Forward dec
 void DisableDestroyHooks();//Forward dec
 
-Function<void(SDK::FBrickChatMessage* This, SDK::EChatMessageType Type, SDK::ABrickPlayerController* Controller)> FBrickChatMessageConstructor("48 89 5C 24 08 57 48 83 EC 20 88");
-
-void SendUserError(const std::string& errorMessage)
+static int Lua_Require(lua_State* callerL)
 {
-    auto PC = GetBrickPlayerController();
-    SDK::FBrickChatMessage Message;
-    FBrickChatMessageConstructor(&Message, SDK::EChatMessageType::Message, PC);
-    std::wstring ErrorWString = to_wstring(errorMessage);
-    SDK::FString ErrorString(ErrorWString.c_str());
-    Message.TextOption = SDK::UKismetTextLibrary::Conv_StringToText(ErrorString);
-    Message.Player.PlayerName = UC::FString(L"Lua");
-    PC->ClientReceiveChatMessage(Message);
-}
-
-namespace InputChannel_RE
-{
-    struct FBrickEditorObjectID
+    const char* name = luaL_checkstring(callerL, 1);
+    auto cached = g_LoadedModules.find(name);
+    if (cached != g_LoadedModules.end())
     {
-        unsigned __int16 ID;
-    };
-
-    template<typename T>
-    struct __declspec(align(4)) TBrickEditorObjectPtr
-    {
-        SDK::TWeakObjectPtr<T> Ptr;
-        FBrickEditorObjectID ID;
-    };
-
-    /* 201744 */
-    struct FBrickEditorObjectPtr
-    {
-        TBrickEditorObjectPtr<SDK::UBrickEditorObject> Ptr;
-    };
-
-    float GetInputChannelValue(int Index)
-    {
-        if (ActiveBrick)
-        {
-            SDK::FVehicleInputChannel InputChannel = ActiveBrick->InputChannel;
-            if (Index == -1) return InputChannel.Value;
-            if (InputChannel.SourceBricks.Num() < Index) return 0.0f;
-            {
-                SDK::FBrickEditorObjectPtr Raw = InputChannel.SourceBricks[Index];
-                FBrickEditorObjectPtr* Pointer = reinterpret_cast<FBrickEditorObjectPtr*>(&Raw);
-                SDK::UBrickEditorObject* Obj = Pointer->Ptr.Ptr.Get();
-                if (!Obj) return 0.0f;
-
-                if (Obj->IsA(SDK::UMathBrick::StaticClass()))
-                {
-                    return reinterpret_cast<SDK::UMathBrick*>(Obj)->OutputChannel.CurrentValue;
-                }
-                if (Obj->IsA(SDK::USensorBrickBase::StaticClass()))
-                {
-                    return reinterpret_cast<SDK::USensorBrickBase*>(Obj)->OutputChannel.CurrentValue;
-                }
-                return 0.0f;
-            }
-        }
-        return 0.0f;
+        cached->second.push(callerL);
+        return 1;
     }
-}
 
-void SetOutputChannelValue(float Value)
-{
-    if (!ActiveBrick) return;
-    ActiveBrick->SetOutputChannelValue(ActiveBrick->OutputChannel, Value);
+    SDK::ABrickVehicle* Vehicle = Helpers::GetBrickPlayerController()->PlayerVehicle; // or pass vehicle context through some other means
+    std::string source = Helpers::FindModuleSource(Vehicle, name);
+    if (source.empty())
+        return luaL_error(callerL, "Module '%s' not found", name);
+
+    //Modules get global state and can theroretically interact with eachother
+    lua_State* modco = lua_newthread(callerL);
+    luabridge::LuaRef modThreadRef(callerL, luabridge::LuaRef::fromStack(callerL, -1));
+    lua_pop(callerL, 1);
+
+    luabridge::LuaRef modEnv = luabridge::newTable(modco);
+    lua_newtable(modco);
+    g_SandboxGlobals->push(modco);
+    lua_setfield(modco, -2, "__index");
+    modEnv.push(modco);
+    lua_pushvalue(modco, -2);
+    lua_setmetatable(modco, -2);
+    lua_pop(modco, 2);
+
+    if (luaL_loadstring(modco, source.c_str()) != LUA_OK)
+        return luaL_error(callerL, "Module '%s' failed to compile: %s", name, lua_tostring(modco, -1));
+
+    modEnv.push(modco);
+    lua_setupvalue(modco, -2, 1);
+
+    if (lua_pcall(modco, 0, 1, 0) != LUA_OK)
+        return luaL_error(callerL, "Module '%s' errored: %s", name, lua_tostring(modco, -1));
+
+    lua_xmove(modco, L, 1); // moves to the real global L
+    luabridge::LuaRef result = luabridge::LuaRef::fromStack(L, -1);
+    lua_pop(L, 1);
+    g_LoadedModules.emplace(name, result);
+
+    result.push(callerL);
+    return 1;
 }
 
 void LoadLuaLibraries(lua_State* L)
@@ -149,16 +96,19 @@ void LuaRuntime::Initialize()
     lua_newtable(L); // sandbox globals table, sits at top of stack
 
     lua_pushcfunction(L, [](lua_State* L) -> int {
-        lua_pushnumber(L, InputChannel_RE::GetInputChannelValue((int)luaL_checkinteger(L, 1)));
+        lua_pushnumber(L, BrickAPI::GetInputChannelValue((int)luaL_checkinteger(L, 1)));
         return 1;
         });
-    lua_setfield(L, -2, "GetInputChannel");
+    lua_setfield(L, -2, "GetInChannelVal");
 
     lua_pushcfunction(L, [](lua_State* L) -> int {
-        SetOutputChannelValue((float)luaL_checknumber(L, 1));
+        BrickAPI::SetOutputChannelValue((float)luaL_checknumber(L, 1));
         return 0;
         });
-    lua_setfield(L, -2, "SetOutputChannel");
+    lua_setfield(L, -2, "SetOutChannelVal");
+
+    lua_pushcfunction(L, Lua_Require);
+    lua_setfield(L, -2, "require");
 
     // Whitelist specific real stdlib globals, including the REAL print
     const char* allowedGlobals[] = {
@@ -178,6 +128,13 @@ void LuaRuntime::Initialize()
         lua_getglobal(L, name);
         lua_setfield(L, -2, name);
     }
+
+    /*
+     * Add functions and other BS
+     */
+    luabridge::getGlobalNamespace(L)
+        .addFunction("SetInChannelVal", BrickAPI::SetInputChannelValue)
+        .addFunction("GetOutChannelVal", BrickAPI::GetOutputChannelValue);
 
     g_SandboxGlobals = new luabridge::LuaRef(luabridge::LuaRef::fromStack(L, -1));
     lua_pop(L, 1);
@@ -202,15 +159,22 @@ void LuaRuntime::Shutdown()
     if (L) { lua_close(L); L = nullptr; }
 }
 
-static int Lua_BlockGlobalWrite(lua_State* L)
+static int Lua_ProtectApiNames(lua_State* L)
 {
+    // __newindex receives: 1 = table, 2 = key, 3 = value
     const char* key = lua_tostring(L, 2);
-    if (key && strcmp(key, "Tick") == 0)
+
+    if (key)
     {
-        lua_rawset(L, 1); // bypass the metamethod, write directly into the env table
-        return 0;
+        luabridge::LuaRef existing = (*g_SandboxGlobals)[key];
+        if (existing.isFunction())
+        {
+            return luaL_error(L, "'%s' is a reserved API function and cannot be overwritten.", key);
+        }
     }
-    return luaL_error(L, "Global variables are not allowed ('%s'). Use the storage API instead.", key ? key : "?");
+
+    lua_rawset(L, 1); // bypass the metamethod, write directly into the brick's env table
+    return 0;
 }
 
 static void InstructionLimitHook(lua_State* L, lua_Debug*)
@@ -218,35 +182,15 @@ static void InstructionLimitHook(lua_State* L, lua_Debug*)
     luaL_error(L, "Script exceeded instruction limit (possible infinite loop)");
 }
 
-void PrintWholeString(std::wstring str)
-{
-    for (wchar_t c : str) std::cout << (int)c << " ";
-        std::cout << "\n";
-}
-
 void AddLuaBrickToRuntime(SDK::USwitchBrick* Brick, SDK::ABrickVehicle* Vehicle)
 {
-    std::wstring ScriptID = Brick->SwitchName.ToWString();
-    if (ScriptID.empty() || ScriptID.find(L'=') == std::string::npos) return;
+    std::string ScriptID = Brick->SwitchName.ToString();
+    if (ScriptID.empty() || ScriptID.find('=') == std::string::npos) return;
+    ScriptID = ScriptID.substr(ScriptID.find('=')+1);
 
-    std::string source = "";
-    for (SDK::UBrick* Brick : Vehicle->GetBricks())
-    {
-        if (Brick->IsA(SDK::UTextBrick::StaticClass()))
-        {
-            auto TextBrick = reinterpret_cast<SDK::UTextBrick*>(Brick);
-            std::wstring TextBrickString = TextBrick->Text.ToWString();
-            if (TextBrickString.empty() || TextBrickString.find(L'\n') == std::string::npos) return;
-            std::wstring TextBrickScriptID = TextBrickString.substr(0, TextBrickString.find(L'\n')-1);//Remove carrige terminator
-            if (ScriptID == TextBrickScriptID)
-            {
-                std::wcout << TextBrickString.substr(TextBrickString.find('\n')+1) << std::endl;
-                source = TextBrick->Text.ToString().substr(TextBrickString.find('\n')+1);
-            }
-        }
-    }
+    std::string source = Helpers::FindModuleSource(Vehicle, ScriptID);
 
-    if (source.empty()) SendUserError("Failed to find text brick with lua code!");
+    if (source.empty()) Helpers::SendUserError("Failed to find text brick with lua code!");
 
     lua_State* co = lua_newthread(L);
     lua_sethook(co, InstructionLimitHook, LUA_MASKCOUNT, LUA_MAX_INSTRUCTIONS_PER_TICK);
@@ -260,7 +204,7 @@ void AddLuaBrickToRuntime(SDK::USwitchBrick* Brick, SDK::ABrickVehicle* Vehicle)
     lua_newtable(co); // metatable
     g_SandboxGlobals->push(co);      // was: g_ApiTable->push(co)
     lua_setfield(co, -2, "__index");
-    lua_pushcclosure(co, Lua_BlockGlobalWrite, 0);
+    lua_pushcclosure(co, Lua_ProtectApiNames, 0); // was: Lua_BlockGlobalWrite (or newly added if you'd removed __newindex entirely)
     lua_setfield(co, -2, "__newindex");
     envRef.push(co);
     lua_pushvalue(co, -2);      // metatable
@@ -269,7 +213,7 @@ void AddLuaBrickToRuntime(SDK::USwitchBrick* Brick, SDK::ABrickVehicle* Vehicle)
 
     if (luaL_loadstring(co, source.c_str()) != LUA_OK)
     {
-        SendUserError(lua_tostring(co, -1));
+        Helpers::SendUserError(lua_tostring(co, -1));
         lua_pop(co, 1);
         return;
     }
@@ -282,7 +226,7 @@ void AddLuaBrickToRuntime(SDK::USwitchBrick* Brick, SDK::ABrickVehicle* Vehicle)
     // ...
     if (lua_pcall(co, 0, 0, 0) != LUA_OK)
     {
-        SendUserError(lua_tostring(co, -1));
+        Helpers::SendUserError(lua_tostring(co, -1));
         lua_pop(co, 1);
         it->second.HasError = true;
     }
@@ -294,7 +238,7 @@ void SetupVehicleLua(SDK::ABrickVehicle* Vehicle)
 	// Setup Lua environment for the vehicle, load scripts, etc.
     for (SDK::UBrick* SwitchBrick : Vehicle->GetBricks()) // adjust to actual accessor
     {
-        if (!IsLuaBrick(SwitchBrick)) continue;
+        if (!Helpers::IsLuaBrick(SwitchBrick)) continue;
         AddLuaBrickToRuntime(reinterpret_cast<SDK::USwitchBrick*>(SwitchBrick), Vehicle);
     }
 }
@@ -302,18 +246,18 @@ void SetupVehicleLua(SDK::ABrickVehicle* Vehicle)
 void TickLuaBrick(LuaBrick& brick, float DeltaTime)
 {
     if (brick.HasError) return;
-    auto PC = GetBrickPlayerController();
+    auto PC = Helpers::GetBrickPlayerController();
     if (!PC || PC->PlayerVehicle != brick.Brick->GetVehicle()) return;
 
     luabridge::LuaRef tickFn = brick.EnvRef["Tick"];
     if (!tickFn.isFunction()) return;
 
     lua_sethook(brick.Coroutine, InstructionLimitHook, LUA_MASKCOUNT, LUA_MAX_INSTRUCTIONS_PER_TICK);
-    ActiveBrick = brick.Brick;
+    BrickAPI::SetActiveBrick(brick.Brick);
     auto result = tickFn(DeltaTime);
     if (result.error())
     {
-        SendUserError(result.message());
+        Helpers::SendUserError(result.message());
         brick.HasError = true;
     }
 }
@@ -335,13 +279,14 @@ Hook<void(SDK::UPlayerInputComponent*, SDK::ABrickVehicle*)> OnPlayerVehicleChan
 [](SDK::UPlayerInputComponent* This, SDK::ABrickVehicle* Vehicle) -> void
 {
     OnPlayerVehicleChangedHook.CallOriginalFunction(This, Vehicle);
-    if (GetBrickPlayerController() && GetBrickPlayerController()->PlayerVehicle && Vehicle == GetBrickPlayerController()->PlayerVehicle)
+    if (Helpers::GetBrickPlayerController() && Helpers::GetBrickPlayerController()->PlayerVehicle && Vehicle == Helpers::GetBrickPlayerController()->PlayerVehicle)
     {
         for (auto& [brickPtr, brick] : LuaBricks)
         {
             BrickByState.erase(brick.Coroutine);
         }
         LuaBricks.clear();
+        g_LoadedModules.clear();
 
         if (Vehicle)
         {
@@ -367,10 +312,3 @@ void DisableDestroyHooks()
     OnPlayerVehicleChangedHook.Disable();
     OnPlayerVehicleChangedHook.Destroy();
 }
-
-/*
-* How do we know when or when not to execute Lua code?
-* Runtime - How do we handle errors?
-* What happens when something breaks? Do we crash the game? Do we log it? Do we try to recover?
-* How to report errors to the user? Do we have a console? Do we have a log file? Do we have a UI for errors?
-*/

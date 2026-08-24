@@ -7,6 +7,8 @@
 #include <windows.h>
 #include <sstream>
 
+//#define SHIPPING
+
 static std::string Hex(DWORD code) {
     std::ostringstream ss;
     ss << "0x" << std::hex << std::uppercase << std::setw(8) << std::setfill('0') << code;
@@ -105,11 +107,13 @@ std::string GetExceptionName(DWORD code) {
 LONG WINAPI UpgradedExceptionHandler(PEXCEPTION_POINTERS ExceptionInfo) {
     PEXCEPTION_RECORD record = ExceptionInfo->ExceptionRecord;
 
+    #ifdef SHIPPING
     std::cerr << "DLL EXCEPTION!: ";
 
     // 1. Basic Exception Info
     std::cerr << "Exception Code: 0x" << std::hex << std::uppercase << record->ExceptionCode
         << " -> " << GetExceptionName(record->ExceptionCode) << "\n";
+    #endif
 
     //DUMP THE CONSOLE
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
