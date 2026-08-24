@@ -3,8 +3,8 @@
 
 --This function HAS to be implemented globally in Execution modules
 function Tick(Delta)
-	local X = GetInChannelVal(0) --Reads the bound brick on index 0 output channel value
-	local Z = GetInChannelVal(1) --Reads the bound brick on index 1 output channel value
+	local X = GetInChannelVal(0) --Reads the bound brick on index 0's output channel value
+	local Z = GetInChannelVal(1) --Reads the bound brick on index 1's output channel value
 	local XZ = GetInChannelVal(-1) --Reads this bricks input channel
 	print("X" .. X)
 	print("Z" .. Z)
