@@ -25,7 +25,7 @@
 
 ### `GetInChannelVal(ChannelIndex)`
 
-Gets the value of an input channel binded to this Bricks output channel by index (Uses 0 indexing). 
+Gets the value of an output channel binded to this bricks input channel by index (Uses 0 indexing). 
 Index starts based on selection order of bricks
 Use `-1` to get the value of the input channel of this Brick (vanilla behavior)
 
