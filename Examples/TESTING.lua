@@ -11,8 +11,8 @@ function Tick(Delta)
 	print("X" .. X)
 	print("Z" .. Z)
 	SetOutChannelVal(Delta * MathLib.PI) --Sets this bricks output channel value
-	SetOutChannelValNamed("LastDeltaTime", Delta) --Looks for a switch brick named "LastDeltaTime" and sets its input channel to Delta
-	local LastDeltaTime = GetOutChannelValNamed("LastDeltaTime") --Looks for s switch brick named "LastDeltaTime" and reads its input channel
+	SetOutChannelValNamed("LastDeltaTime", Delta) --Looks for a switch brick named "LastDeltaTime" and sets its output channel to Delta
+	local LastDeltaTime = GetOutChannelValNamed("LastDeltaTime") --Looks for s switch brick named "LastDeltaTime" and reads its output channel value
 	print(LastDeltaTime)
 end
 
