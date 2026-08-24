@@ -206,13 +206,6 @@
     <ClInclude Include="LuaRuntime.hpp" />
     <ClInclude Include="VehicleAPI.hpp" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="TESTING.lua" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="MathLib.lua" />
-    <Content Include="StorageBrick.lua" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

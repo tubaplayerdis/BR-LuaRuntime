@@ -140,7 +140,7 @@ void BrickAPI::RegisterSwitchBrick(SDK::USwitchBrick* Brick)
     SwitchBricks.insert_or_assign(Name, Brick);
 }
 
-float BrickAPI::GetInputChannelValueNamed(const char* Name)
+float BrickAPI::GetOutputChannelValueNamed(const char* Name)
 {
     std::string BrickName(Name);
     if (SwitchBricks.find(BrickName) == SwitchBricks.end())
@@ -148,10 +148,10 @@ float BrickAPI::GetInputChannelValueNamed(const char* Name)
         LuaRuntime::RaiseLuaException("Could not find a SwitchBrick of name: " + BrickName);
         return 0.0f;
     }
-    return SwitchBricks[BrickName]->InputChannel.Value;
+    return SwitchBricks[BrickName]->OutputChannel.CurrentValue;
 }
 
-void BrickAPI::SetInputChannelValueNamed(const char* Name, float Value)
+void BrickAPI::SetOutputChannelValueNamed(const char* Name, float Value)
 {
     std::string BrickName(Name);
     if (SwitchBricks.find(BrickName) == SwitchBricks.end())
@@ -160,6 +160,5 @@ void BrickAPI::SetInputChannelValueNamed(const char* Name, float Value)
         return;
     }
     SDK::USwitchBrick* Brick = SwitchBricks[BrickName];
-    Brick->InputChannel.Value = Value;
-    USwitchBrick_UpdateSwitchValue(Brick, true);
+    Brick->SetOutputChannelValue(Brick->OutputChannel, Value);
 }

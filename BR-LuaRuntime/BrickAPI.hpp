@@ -13,6 +13,6 @@ namespace BrickAPI
 
     void ClearSwitchBrickRegistry();
     void RegisterSwitchBrick(SDK::USwitchBrick* Brick);
-    float GetInputChannelValueNamed(const char* Name);
-    void SetInputChannelValueNamed(const char* Name, float Value);
+    float GetOutputChannelValueNamed(const char* Name);
+    void SetOutputChannelValueNamed(const char* Name, float Value);
 }

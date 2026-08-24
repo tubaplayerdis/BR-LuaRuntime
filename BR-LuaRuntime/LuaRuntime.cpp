@@ -136,17 +136,17 @@ void LuaRuntime::Initialize()
 
     lua_pushcfunction(L, [](lua_State* L) -> int
     {
-        BrickAPI::SetInputChannelValueNamed(luaL_checklstring(L, 1, nullptr), luaL_checknumber(L, 2));
+        BrickAPI::SetOutputChannelValueNamed(luaL_checklstring(L, 1, nullptr), luaL_checknumber(L, 2));
         return 0;
     });
-    lua_setfield(L, -2, "SetInChannelValNamed");
+    lua_setfield(L, -2, "SetOutChannelValNamed");
 
     lua_pushcfunction(L, [](lua_State* L) -> int
     {
-        lua_pushnumber(L, BrickAPI::GetInputChannelValueNamed(luaL_checklstring(L, 1, nullptr)));
+        lua_pushnumber(L, BrickAPI::GetOutputChannelValueNamed(luaL_checklstring(L, 1, nullptr)));
         return 1;
     });
-    lua_setfield(L, -2, "GetInChannelValNamed");
+    lua_setfield(L, -2, "GetOutChannelValNamed");
 
     lua_pushcfunction(L, Lua_Require);
     lua_setfield(L, -2, "require");
@@ -211,7 +211,7 @@ void LuaRuntime::RaiseLuaException(std::string const& message)
 
     std::wcout << ErrorContext.c_str() << std::endl;
     Helpers::SendUserError(ErrorContext, message);
-    
+
     if (LastCallingState == nullptr) return;
     luaL_error(LastCallingState, "%s", message.c_str());
 }
