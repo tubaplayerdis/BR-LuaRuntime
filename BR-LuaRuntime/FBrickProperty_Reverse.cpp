@@ -166,16 +166,16 @@ struct FBrickPropertyReflection
 static_assert(sizeof(FBrickPropertyReflection) == 0x88);
 static_assert(offsetof(FBrickPropertyReflection, BrickPropertyEditInfos) == 0x50);
 
-Hook<void(SDK::USwitchBrick* This, FBrickPropertyReflection* Params)> USwitchBrick_ReflectPropertiesHook("40 55 53 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 F8 48 81 EC 08 01 00 00 45",
+Hook<void(SDK::USwitchBrick* This, FBrickPropertyReflection* Params)> UTextBrick_ReflectPropertiesHook("40 55 53 56 57 41 55 41 56 41 57 48 8D 6C 24 ?? 48 81 EC ?? ?? ?? ?? 4C 89 A4 24 ?? ?? ?? ??",
 [](SDK::USwitchBrick* This, FBrickPropertyReflection* Params) -> void
 {
-    USwitchBrick_ReflectPropertiesHook.CallOriginalFunction(This, Params);
+    UTextBrick_ReflectPropertiesHook.CallOriginalFunction(This, Params);
     auto Props = Params->BrickProperties;
     std::cout << Props.Num() << " " << Props.Max() << std::endl;
     static SDK::FString FTextBrickPropertyStringType = SDK::FString(L"FTextBrickProperty");
     static SDK::FName FTextBrickPropertyNameType = SDK::UKismetStringLibrary::Conv_StringToName(FTextBrickPropertyStringType);
-    static SDK::FString SwitchNameStringType = SDK::FString(L"SwitchName");
-    static SDK::FName SwitchNameNameType = SDK::UKismetStringLibrary::Conv_StringToName(SwitchNameStringType);
+    static SDK::FString TextStringType = SDK::FString(L"Text");
+    static SDK::FName TextNameType = SDK::UKismetStringLibrary::Conv_StringToName(TextStringType);
     for (int i = 0; i < Props.Num(); i++)
     {
         FBrickPropertyInstance PropertyInstance = Props[i];
@@ -186,29 +186,14 @@ Hook<void(SDK::USwitchBrick* This, FBrickPropertyReflection* Params)> USwitchBri
             {
                 std::cout << "Is FTextBrickProperty" << std::endl;
                 auto TextBrickProperty = reinterpret_cast<FTextBrickProperty*>(BrickProperty);
-                if (TextBrickProperty->PropertyName == SwitchNameNameType)
+                if (TextBrickProperty->PropertyName == TextNameType)
                 {
                     //TextBrickProperty->VTable->PrintAddresses();
                     //TextBrickProperty->bAllowMultiLine = true;
-                    //TextBrickProperty->MaxTextLength = 32767;
+                    TextBrickProperty->MaxTextLength = 32767;
                 }
             }
         }
         std::cout << PropertyInstance.FullPropertyName.ToString() << std::endl;
     }
 });
-
-Hook<bool(FTextBrickProperty *This, void* FArchive_Ptr, const FBrickPropertyContainer* Container, UC::int8 Version, const FBrickEditorReferenceResolver* Res)> FTextBrickProperty_SerializePropertyHook("48 8B C4 53 48 83 EC 40 48 89 68 08 48 8B DA 48 89 70 10 48",
-    [](FTextBrickProperty *This, void* FArchive_Ptr, const FBrickPropertyContainer* Container, UC::int8 Version, const FBrickEditorReferenceResolver* Res) -> bool
-    {
-        static SDK::FString SwitchNameStringType1 = SDK::FString(L"SwitchName");
-        static SDK::FName SwitchNameNameType1 = SDK::UKismetStringLibrary::Conv_StringToName(SwitchNameStringType1);
-        std::cout << "BRUH" << This->PropertyName.GetRawString() << std::endl;
-        if (This->PropertyName == SwitchNameNameType1)
-        {
-            This->bAllowMultiLine = true;
-            This->MaxTextLength = 32767;
-            std::cout << "Activated" << std::endl;
-        }
-        return FTextBrickProperty_SerializePropertyHook.CallOriginalFunction(This, FArchive_Ptr, Container, Version, Res);
-    });

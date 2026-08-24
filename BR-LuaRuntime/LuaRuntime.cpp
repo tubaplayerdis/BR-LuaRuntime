@@ -415,6 +415,9 @@ Hook<void(SDK::ABrickPlayerController*, SDK::FPlayerSpawnRequest*)> ABrickPlayer
         ABrickPlayerController_RestartAtHook.CallOriginalFunction(This, SpawnRequest);
     });
 
+struct FBrickPropertyReflection;
+extern Hook<void(SDK::USwitchBrick*, FBrickPropertyReflection* Params)> UTextBrick_ReflectPropertiesHook;
+
 void CreateEnableHooks()
 {
     SwitchBrick_TickBrickHook.Create();

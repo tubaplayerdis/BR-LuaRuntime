@@ -1,5 +1,6 @@
 --=TESTING
 -- Include the above at the top of your TextBrick text, without the comment prefix "--"
+-- Remove the comments to use this code!
 
 --This function HAS to be implemented globally in Execution modules
 function Tick(Delta)
