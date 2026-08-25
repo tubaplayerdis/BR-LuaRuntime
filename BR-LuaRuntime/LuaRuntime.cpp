@@ -148,8 +148,6 @@ void LuaRuntime::Initialize()
     });
     lua_setfield(L, -2, "GetOutChannelValNamed");
 
-    //TODO: Fix function invocation
-
     luabridge::getGlobalNamespace(L)
         .beginNamespace("In")
             .addFunction("Get", BrickAPI::GetInputChannelValue)
@@ -165,9 +163,6 @@ void LuaRuntime::Initialize()
         .addFunction("Set", &BrickAPI::StorageBrick::Set)
         .addFunction("Get", &BrickAPI::StorageBrick::Get)
         .endClass();
-
-    // Build the sandbox table
-    lua_newtable(L); // sandbox table on stack
 
     const char* apiNames[] = { "In", "Out", "Store" };
     for (const char* name : apiNames)
@@ -354,10 +349,14 @@ void TickLuaBrick(LuaBrick& brick, float DeltaTime)
     lua_sethook(brick.Coroutine, InstructionLimitHook, LUA_MASKCOUNT, LUA_MAX_INSTRUCTIONS_PER_TICK);
     BrickAPI::SetActiveBrick(brick.Brick);
     SetLastCallingState(brick.Coroutine);
-    auto result = tickFn(DeltaTime);
-    if (result.error())
+
+    tickFn.push(brick.Coroutine);       // push the function
+    lua_pushnumber(brick.Coroutine, DeltaTime);
+    if (lua_pcall(brick.Coroutine, 1, 0, 0) != LUA_OK)
     {
-        Helpers::SendUserError(result.message());
+        const char* err = lua_tostring(brick.Coroutine, -1); // raw error string, guaranteed accurate
+        Helpers::SendUserError(err ? err : "Unknown Lua error");
+        lua_pop(brick.Coroutine, 1);
         brick.HasError = true;
     }
 }
@@ -368,16 +367,20 @@ void InteractLuaBrick(LuaBrick& brick, UC::uint8 Value)
     auto PC = Helpers::GetBrickPlayerController();
     if (!PC || PC->PlayerVehicle != brick.Brick->GetVehicle()) return;
 
-    luabridge::LuaRef tickFn = brick.EnvRef["Interact"];
-    if (!tickFn.isFunction()) return;
+    luabridge::LuaRef interactFn = brick.EnvRef["Interact"];
+    if (!interactFn.isFunction()) return;
 
     lua_sethook(brick.Coroutine, InstructionLimitHook, LUA_MASKCOUNT, LUA_MAX_INSTRUCTIONS_PER_TICK);
     BrickAPI::SetActiveBrick(brick.Brick);
     SetLastCallingState(brick.Coroutine);
-    auto result = tickFn(Value);
-    if (result.error())
+
+    interactFn.push(brick.Coroutine);       // push the function
+    lua_pushnumber(brick.Coroutine, Value);
+    if (lua_pcall(brick.Coroutine, 1, 0, 0) != LUA_OK)
     {
-        Helpers::SendUserError(result.message());
+        const char* err = lua_tostring(brick.Coroutine, -1); // raw error string, guaranteed accurate
+        Helpers::SendUserError(err ? err : "Unknown Lua error");
+        lua_pop(brick.Coroutine, 1);
         brick.HasError = true;
     }
 }

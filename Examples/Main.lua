@@ -8,6 +8,6 @@ function Tick(Delta)
     print("X" .. X)
     print("Z" .. Z)
     Out.Set(Delta)
-    LDT:Set(Delta)--This dosent work
-    print(LDT.Get())
+    LDT:Set(Delta)
+    print(LDT:Get())
 end
