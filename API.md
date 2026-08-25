@@ -166,7 +166,7 @@ Sets the value of this brick's output channel.
 
 **Example:**
 ```lua
-In.Set(123) --Writes this brick's output channel value
+Out.Set(123) --Writes this brick's output channel value
 ```
 
 ---
