@@ -148,6 +148,35 @@ void LuaRuntime::Initialize()
     });
     lua_setfield(L, -2, "GetOutChannelValNamed");
 
+    //TODO: Fix function invocation
+
+    luabridge::getGlobalNamespace(L)
+        .beginNamespace("In")
+            .addFunction("Get", BrickAPI::GetInputChannelValue)
+            .addFunction("Set", BrickAPI::SetInputChannelValue)
+        .endNamespace()
+        .beginNamespace("Out")
+            .addFunction("Get", BrickAPI::GetOutputChannelValue)
+            .addFunction("Set", BrickAPI::SetOutputChannelValue)
+        .endNamespace()
+        .beginClass<BrickAPI::StorageBrick>("Store")
+        .addConstructor<void(*)(const char*)>()
+        .addProperty("Name", &BrickAPI::StorageBrick::Name)
+        .addFunction("Set", &BrickAPI::StorageBrick::Set)
+        .addFunction("Get", &BrickAPI::StorageBrick::Get)
+        .endClass();
+
+    // Build the sandbox table
+    lua_newtable(L); // sandbox table on stack
+
+    const char* apiNames[] = { "In", "Out", "Store" };
+    for (const char* name : apiNames)
+    {
+        luabridge::LuaRef val = luabridge::getGlobal(L, name);
+        val.push(L);
+        lua_setfield(L, -2, name); // sandbox[name] = In / Out / Store
+    }
+
     lua_pushcfunction(L, Lua_Require);
     lua_setfield(L, -2, "require");
 

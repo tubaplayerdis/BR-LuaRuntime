@@ -3,7 +3,6 @@
 #include "LuaRuntime.hpp"
 
 SDK::USwitchBrick* ActiveBrick = nullptr;
-std::unordered_map<std::string, SDK::USwitchBrick*> SwitchBricks;
 
 Function<void(SDK::USwitchBrick* This, bool bImmediate)> USwitchBrick_UpdateSwitchValue("48 89 5C 24 08 57 48 83 EC 20 48 8B F9 84 D2 0F 84 D6");
 
@@ -128,37 +127,54 @@ float BrickAPI::GetOutputChannelValue()
     return ActiveBrick->OutputChannel.CurrentValue;
 }
 
+std::unordered_map<std::string, SDK::USwitchBrick*> SwitchBrickRegistry;
+
 void BrickAPI::ClearSwitchBrickRegistry()
 {
-    SwitchBricks.clear();
+    SwitchBrickRegistry.clear();
 }
 
 void BrickAPI::RegisterSwitchBrick(SDK::USwitchBrick* Brick)
 {
     if (!Brick) return;
     std::string Name = Brick->SwitchName.ToString();
-    SwitchBricks.insert_or_assign(Name, Brick);
+    SwitchBrickRegistry.insert_or_assign(Name, Brick);
 }
 
 float BrickAPI::GetOutputChannelValueNamed(const char* Name)
 {
     std::string BrickName(Name);
-    if (SwitchBricks.find(BrickName) == SwitchBricks.end())
+    if (SwitchBrickRegistry.find(BrickName) == SwitchBrickRegistry.end())
     {
         LuaRuntime::RaiseLuaException("Could not find a SwitchBrick of name: " + BrickName);
         return 0.0f;
     }
-    return SwitchBricks[BrickName]->OutputChannel.CurrentValue;
+    return SwitchBrickRegistry[BrickName]->OutputChannel.CurrentValue;
 }
 
 void BrickAPI::SetOutputChannelValueNamed(const char* Name, float Value)
 {
     std::string BrickName(Name);
-    if (SwitchBricks.find(BrickName) == SwitchBricks.end())
+    if (SwitchBrickRegistry.find(BrickName) == SwitchBrickRegistry.end())
     {
         LuaRuntime::RaiseLuaException("Could not find a SwitchBrick of name: " + BrickName);
         return;
     }
-    SDK::USwitchBrick* Brick = SwitchBricks[BrickName];
+    SDK::USwitchBrick* Brick = SwitchBrickRegistry[BrickName];
     Brick->SetOutputChannelValue(Brick->OutputChannel, Value);
+}
+
+BrickAPI::StorageBrick::StorageBrick(const char* Name_str)
+{
+    Name = std::string(Name_str);
+}
+
+float BrickAPI::StorageBrick::Get()
+{
+    return GetOutputChannelValueNamed(Name.c_str());
+}
+
+void BrickAPI::StorageBrick::Set(float Value)
+{
+    SetOutputChannelValueNamed(Name.c_str(), Value);
 }

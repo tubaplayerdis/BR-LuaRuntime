@@ -15,4 +15,13 @@ namespace BrickAPI
     void RegisterSwitchBrick(SDK::USwitchBrick* Brick);
     float GetOutputChannelValueNamed(const char* Name);
     void SetOutputChannelValueNamed(const char* Name, float Value);
+
+    struct StorageBrick
+    {
+        std::string Name;
+
+        StorageBrick(const char* Name);
+        float Get();
+        void Set(float Value);
+    };
 }
