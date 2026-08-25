@@ -6,8 +6,8 @@ Made by American_Stig (tbgit) @Discord
 
 ## How it works
 
- - Lua is stored on **TextBricks**
- - **Switch Bricks** have their `TickBrick` function overriden internally to run Lua code or have vanilla behavior
+ - Lua is stored on **TextBricks**.
+ - **Switch Bricks** have their `TickBrick` function overriden internally to run Lua code or have vanilla behavior.
 
 ## Want to get started?
 
