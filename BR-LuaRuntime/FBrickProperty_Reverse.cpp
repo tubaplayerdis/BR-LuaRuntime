@@ -1,5 +1,11 @@
 #include <BR-SDK.hpp>
-DWORD_PTR GetStaticAddressFromVA(PVOID va);
+
+#include "Helpers.hpp"
+
+DWORD_PTR GetStaticAddressFromVA(PVOID va)
+{
+    return Helpers::GetStaticAddressFromVA(va);
+}
 
 template<typename T>
 struct TSharedRef

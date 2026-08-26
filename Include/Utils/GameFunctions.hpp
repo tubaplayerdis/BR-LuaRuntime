@@ -87,17 +87,6 @@ TRet CallVTableFunction(int index, void* object, TArgs... args)
     return FunctionFunc(object, std::forward<TArgs>(args)...);
 }
 
-/// Gets the pointer to a member of an object given an offset
-/// @tparam T member type
-/// @param base Address of the object.
-/// @param offset offset of the member
-/// @return T
-template<typename T>
-T* GetPtr(void* base, std::size_t offset)
-{
-    return reinterpret_cast<T*>(reinterpret_cast<std::uint8_t*>(base) + offset);
-}
-
 /// Gets the member of an object given an offset
 /// @tparam T member type
 /// @param base Address of the object.
@@ -127,7 +116,7 @@ void SetMember(void* base, std::size_t offset, const T& value)
 template<typename T>
 T* Cast(void* obj)
 {
-    return reinterpret_cast<T*>(obj);
+    return static_cast<T*>(obj);
 }
 
 /// Find a function address.

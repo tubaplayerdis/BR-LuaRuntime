@@ -8,7 +8,7 @@ namespace VehicleAPI
     //Vehicle is equal to player controller vehicle
     inline bool Valid(SDK::ABrickPlayerController* PC, SDK::ABrickVehicle* vehicle)
     {
-        if (PC->PlayerVehicle == nullptr) SetActiveVehicle(nullptr);
-        return PC && vehicle == PC->PlayerVehicle;
+        if (PC->GetPlayerVehicle() == nullptr) SetActiveVehicle(nullptr);
+        return PC && vehicle == PC->GetPlayerVehicle();
     }
 }

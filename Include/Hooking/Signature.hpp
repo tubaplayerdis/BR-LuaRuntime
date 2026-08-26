@@ -52,7 +52,7 @@ public:
 
 template <typename>
 class Function;
-//maybe add hooking functionality?
+
 template <typename Ret, typename... Args>
 class Function<Ret(Args...)> : public Signature
 {
@@ -72,7 +72,7 @@ public:
         if (GetPtr() == 0) std::cerr << "UNRESOLVED SIG: " << GetSig() << std::endl;
     }
 
-    Ret Execute(Args... args)
+    virtual Ret Call(Args... args)
     {
         using FunctionFn = Ret(__fastcall*)(Args...);
         FunctionFn OnFunction = reinterpret_cast<FunctionFn>(GetPtr());
@@ -81,6 +81,8 @@ public:
 
     Ret operator()(Args... args)
     {
-        return Execute(args...);
+        return Call(args...);
     }
+
+    virtual ~Function() noexcept = default;
 };

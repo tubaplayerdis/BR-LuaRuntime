@@ -94,3 +94,17 @@ std::string Helpers::FindModuleSource(SDK::ABrickVehicle* Vehicle, const std::st
     std::cout << "Did not find module!" << moduleName << std::endl;
     return "";
 }
+
+//Get the static offset of a function from a live address. Appends the 0x140000000 offset automatically so you only have to jump to the hex representation of this return in IDA.
+DWORD_PTR Helpers::GetStaticAddressFromVA(PVOID va) {
+    HMODULE hModule = NULL;
+
+    if (!GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS, (LPCTSTR)va, &hModule)) {
+        return 0;
+    }
+
+    DWORD_PTR rva = (DWORD_PTR)va - (DWORD_PTR)hModule;
+
+    // IDA's displayed address = its loaded ImageBase + RVA
+    return rva;
+}

@@ -25,8 +25,7 @@ SDK::UClass* GetClassInternal(const char* clsobjname)
 	auto RegistryInterface = SDK::UAssetRegistryHelpers::GetAssetRegistry();
 	SDK::IAssetRegistry* Registry = static_cast<SDK::IAssetRegistry*>(RegistryInterface.GetInterfaceRef());
 	SDK::TArray<SDK::FAssetData> data = SDK::TArray<SDK::FAssetData>();
-	std::wstring clsobjname_w = UtfN::StringToWString(std::string(clsobjname));
-	Registry->GetAssetsByClass(SDK::UKismetStringLibrary::Conv_StringToName(SDK::FString(clsobjname_w.c_str())), &data, true);
+	Registry->GetAssetsByClass(SDK::UKismetStringLibrary::Conv_StringToName(SDK::FString(UtfN::StringToWString(std::string(clsobjname)))), &data, true);
 	return SDK::UAssetRegistryHelpers::GetClass(data[0]);
 }
 

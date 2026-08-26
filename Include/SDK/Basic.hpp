@@ -61,12 +61,13 @@ using namespace UC;
 */
 namespace Offsets
 {
-	constexpr int32 GObjects          = 0x04A36A00;
-	constexpr int32 AppendString      = 0x0114AA30;
-	constexpr int32 GNames            = 0x049FA580;
-	constexpr int32 GWorld            = 0x04B7A1F8;
-	constexpr int32 ProcessEvent      = 0x01354710;
-	constexpr int32 ProcessEventIdx   = 0x00000044;
+	void FindOffsets();
+	int32 OGObjects();
+	int32 OAppendString();
+	int32 OGNames();
+	int32 OGWorld();
+	int32 OProcessEvent();
+	constexpr int32 ProcessEventIdx   = 0x00000044;//Very low chance of this changing
 }
 
 namespace InSDKUtils
@@ -295,7 +296,7 @@ public:
 private:
 	inline void InitGObjects()
 	{
-		GObjectsAddress = reinterpret_cast<void*>(InSDKUtils::GetImageBase() + Offsets::GObjects);
+		GObjectsAddress = reinterpret_cast<void*>(InSDKUtils::GetImageBase() + Offsets::OGObjects());
 	}
 
 public:
@@ -368,7 +369,7 @@ public:
 
 	static void InitInternal()
 	{
-		AppendString = reinterpret_cast<void*>(InSDKUtils::GetImageBase() + Offsets::AppendString);
+		AppendString = reinterpret_cast<void*>(InSDKUtils::GetImageBase() + Offsets::OAppendString());
 	}
 
 	bool IsNone() const
@@ -1203,6 +1204,21 @@ DUMPER7_ASSERTS_FField;
 // 0x0040 (0x0078 - 0x0038)
 class FProperty : public FField
 {
+	template<typename TRet, typename... TArgs>
+	static TRet CallVTableFunction(int index, void* object, TArgs... args)
+	{
+		using FunctionFn = TRet(__fastcall*)(void*, TArgs...);
+		void** vtable = *reinterpret_cast<void***>(object);
+		FunctionFn FunctionFunc = reinterpret_cast<FunctionFn>(vtable[index]);
+		return FunctionFunc(object, std::forward<TArgs>(args)...);
+	}
+
+	template<typename T>
+	static T& GetMember(void* base, std::size_t offset)
+	{
+		return *reinterpret_cast<T*>(reinterpret_cast<std::uint8_t*>(base) + offset);
+	}
+
 public:
 	int32                                         ArrayDim;                                          // 0x0038(0x0004)(NOT AUTO-GENERATED PROPERTY)
 	int32                                         ElementSize;                                       // 0x003C(0x0004)(NOT AUTO-GENERATED PROPERTY)
@@ -1210,6 +1226,38 @@ public:
 	uint8                                         Pad_48[0x4];                                       // 0x0048(0x0004)(Fixing Size After Last Property [ Dumper-7 ])
 	int32                                         Offset;                                            // 0x004C(0x0004)(NOT AUTO-GENERATED PROPERTY)
 	uint8                                         Pad_50[0x28];                                      // 0x0050(0x0028)(Fixing Struct Size After Last Property [ Dumper-7 ])
+
+	void InitializeValue(void* Value)
+	{
+		CallVTableFunction<void, void*>(0xF8, this, Value);
+	}
+
+	bool HasAnyPropertyFlags(EPropertyFlags Flags)
+	{
+		return (Flags & static_cast<EPropertyFlags>(PropertyFlags));
+	}
+
+	void CopyCompleteValueToScriptVM(void* Value, const void* NewValue)
+	{
+		CallVTableFunction<void, void*, const void*>(0xD0, this, Value, NewValue);
+	}
+
+	void CopyCompleteValueFromScriptVM(void* Value, const void* NewValue)
+	{
+		CallVTableFunction<void, void*, const void*>(0xE0, this, Value, NewValue);
+	}
+
+	FProperty* GetPropertyLinkNext()
+	{
+		return GetMember<FProperty*>(this, 0x58);
+	}
+
+	template<typename ValueType>
+	ValueType* ContainerPtrToValuePtr(void* ContainerPtr, int32 ArrayIndex = 0) const
+	{
+		int Offset_Internal = GetMember<int>(const_cast<FProperty*>(this), 0x4C);
+		return (ValueType*)ContainerPtr + Offset_Internal + ElementSize * ArrayIndex;
+	}
 };
 DUMPER7_ASSERTS_FProperty;
 

@@ -35,7 +35,7 @@ static int Lua_Require(lua_State* callerL)
         return 1;
     }
 
-    SDK::ABrickVehicle* Vehicle = Helpers::GetBrickPlayerController()->PlayerVehicle; // or pass vehicle context through some other means
+    SDK::ABrickVehicle* Vehicle = Helpers::GetBrickPlayerController()->GetPlayerVehicle(); // or pass vehicle context through some other means
     std::string source = Helpers::FindModuleSource(Vehicle, name);
     if (source.empty())
         return luaL_error(callerL, "Module '%s' not found", name);
@@ -341,7 +341,7 @@ void TickLuaBrick(LuaBrick& brick, float DeltaTime)
 {
     if (brick.HasError) return;
     auto PC = Helpers::GetBrickPlayerController();
-    if (!PC || PC->PlayerVehicle != brick.Brick->GetVehicle()) return;
+    if (!PC || PC->GetPlayerVehicle() != brick.Brick->GetVehicle()) return;
 
     luabridge::LuaRef tickFn = brick.EnvRef["Tick"];
     if (!tickFn.isFunction()) return;
@@ -365,7 +365,7 @@ void InteractLuaBrick(LuaBrick& brick, UC::uint8 Value)
 {
     if (brick.HasError) return;
     auto PC = Helpers::GetBrickPlayerController();
-    if (!PC || PC->PlayerVehicle != brick.Brick->GetVehicle()) return;
+    if (!PC || PC->GetPlayerVehicle() != brick.Brick->GetVehicle()) return;
 
     luabridge::LuaRef interactFn = brick.EnvRef["Interact"];
     if (!interactFn.isFunction()) return;
