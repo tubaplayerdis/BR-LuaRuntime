@@ -51,10 +51,6 @@ DWORD WINAPI MainThread(LPVOID lpReserved)
     BR_SDK_Init();
     LuaRuntime::Initialize(); //Initalize Lua Runtime
 
-#ifndef _DEBUG
-    MessageBoxA(NULL, "BR-Lua started successfully!", "BR-Lua", MB_OK);
-#endif
-
     while (true)
     {
 #ifdef _DEBUG
