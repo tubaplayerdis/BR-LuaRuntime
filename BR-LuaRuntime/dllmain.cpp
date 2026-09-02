@@ -60,7 +60,7 @@ DWORD WINAPI MainThread(LPVOID lpReserved)
         }
 #endif
 
-		if (WaitForSingleObject(hShutdownEvent, 10))
+		if (WaitForSingleObject(hShutdownEvent, 10) == 0)
 		{
 		    break;
 		}
