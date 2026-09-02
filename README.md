@@ -13,4 +13,4 @@ Made by American_Stig (tbgit) @Discord
 
 ## Want to get started?
 
-### READ THE [API REFERENCE]([API.MD](https://github.com/tubaplayerdis/BR-LuaRuntime/blob/master/API.md))
+### READ THE [API REFERENCE](https://github.com/tubaplayerdis/BR-LuaRuntime/blob/master/API.md)
