@@ -24,7 +24,7 @@ API's use short names to help with the character restriction
 
 ```lua
 --=Main
-
+--Remove the comment prefix (--) when using in BR
 function Tick(Delta)
     print(Delta)
 end
@@ -36,7 +36,8 @@ This library is referenced in the module above. Its state is shared between modu
 This module uses the `safe module` practice.
 
 ```lua
---=MathLib --Remove the comment prefix (--) when using in BR
+--=MathLib
+--Remove the comment prefix (--) when using in BR
 local M = {}
 
 function M.clamp(x, lo, hi)
@@ -54,7 +55,7 @@ return M
 
 ```lua
 --=Main
-
+--Remove the comment prefix (--) when using in BR
 local MathLib = require("MathLib")
 
 function Tick(Delta)
