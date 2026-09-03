@@ -8,6 +8,7 @@
 #include "Helpers.hpp"
 #include "LuaRuntime.hpp"
 
+//#define CONSOLE //Define when doing a console build. Always build in release
 
 //Global variables
 HMODULE self = nullptr;
@@ -31,7 +32,7 @@ DWORD WINAPI MainThread(LPVOID lpReserved)
     HMODULE hModule = static_cast<HMODULE>(lpReserved);
     self = hModule;
 
-#ifdef _DEBUG //If in debug version enable console.
+#ifdef CONSOLE //If in debug version enable console.
     AllocConsole();
     freopen_s(&pStdIn, "CONIN$", "r", stdin);
     freopen_s(&pStdOut, "CONOUT$", "w", stdout);
@@ -40,7 +41,7 @@ DWORD WINAPI MainThread(LPVOID lpReserved)
     SetConsoleOutputCP(CP_UTF8);
 #endif // _DEBUG
 
-#ifdef _DEBUG
+#ifdef CONSOLE
     std::cout << "Brick Rigs Lua Runtime - American_Stig (tbgit) @Discord" << std::endl;
     std::cout << "API Reference: " << "https://github.com/tubaplayerdis/BR-LuaRuntime" << std::endl;
     std::cout << "Lua runtime will cause FREEZES Sometimes - Press ENTER to fix" << std::endl;
@@ -53,7 +54,7 @@ DWORD WINAPI MainThread(LPVOID lpReserved)
 
     while (true)
     {
-#ifdef _DEBUG
+#ifdef CONSOLE
         if (GetAsyncKeyState(VK_F6) & 0x8000)
         {
             break;
@@ -78,7 +79,7 @@ void CleanUp(HMODULE hModule)
     MH_RemoveHook(MH_ALL_HOOKS);
     MH_Uninitialize();
 
-#ifdef _DEBUG
+#ifdef CONSOLE
     fclose(pStdIn);
     fclose(pStdOut);
     fclose(pStdErr);
