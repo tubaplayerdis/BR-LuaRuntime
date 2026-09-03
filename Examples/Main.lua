@@ -1,5 +1,5 @@
 --=Main
--- Remove the comment prefex (--) above when using!
+-- Remove the comment prefex (--) above when using in BR!
 LDT = Store("LastDeltaTime")
 function Tick(Delta)
     local X = In.Get(0)
