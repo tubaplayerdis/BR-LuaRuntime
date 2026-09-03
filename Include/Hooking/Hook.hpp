@@ -74,14 +74,23 @@ protected:
 
 public:
 
+	//Performs all operations in the Queue
+	static void ApplyQueued();
+
 	/// Registers the Hook with MinHook but does not enable it
 	void Create();
 
 	/// Enables the Hook.
 	void Enable();
 
+	/// Queues the Hook to be enabled. Use ApplyQueued to enable.
+	void QueueEnable();
+
 	/// Disables the Hook.
 	void Disable();
+
+	/// Queues the Hook to be disabled. Use ApplyQueued to disable.
+	void QueueDisable();
 
 	/// Destroys the Hook.
 	void Destroy();
@@ -171,7 +180,7 @@ template<typename Ret, typename ...Args>
 void Hook<Ret(Args...)>::Create()
 {
 	if (Initialized) return;
-	assert(Init());
+	if (!Init()) std::cout << "HOOK FAILED: " << this->GetSig() << std::endl;
 }
 
 template<typename Ret, typename ...Args>
@@ -179,8 +188,18 @@ void Hook<Ret(Args...)>::Enable()
 {
 	if (!Initialized) Create();
 	if (!Initialized || Enabled) return;
-	MH_QueueEnableHook((LPVOID)this->GetPtr());
-	MH_ApplyQueued();
+	MH_STATUS ret = MH_EnableHook((LPVOID)this->GetPtr());
+	if (ret != MH_OK) std::cout << "HOOK ENABLE FAILED: " << this->GetSig() << " -> " << ret << std::endl;
+	Enabled = true;
+}
+
+template<typename Ret, typename ...Args>
+void Hook<Ret(Args...)>::QueueEnable()
+{
+	if (!Initialized) Create();
+	if (!Initialized || Enabled) return;
+	MH_STATUS ret = MH_QueueEnableHook((LPVOID)this->GetPtr());
+	if (ret != MH_OK) std::cout << "HOOK ENABLE FAILED: " << this->GetSig() << " -> " << ret << std::endl;
 	Enabled = true;
 }
 
@@ -188,8 +207,17 @@ template<typename Ret, typename ...Args>
 void Hook<Ret(Args...)>::Disable()
 {
 	if (!Initialized || !Enabled) return;
-	MH_QueueDisableHook((LPVOID)this->GetPtr());
-	MH_ApplyQueued();
+	MH_STATUS ret = MH_DisableHook((LPVOID)this->GetPtr());
+	if (ret != MH_OK) std::cout << "HOOK DISABLE FAILED: " << this->GetSig() << " -> " << ret << std::endl;
+	Enabled = false;
+}
+
+template<typename Ret, typename ...Args>
+void Hook<Ret(Args...)>::QueueDisable()
+{
+	if (!Initialized || !Enabled) return;
+	MH_STATUS ret = MH_QueueDisableHook((LPVOID)this->GetPtr());
+	if (ret != MH_OK) std::cout << "HOOK DISABLE FAILED: " << this->GetSig() << " -> " << ret << std::endl;
 	Enabled = false;
 }
 
@@ -234,5 +262,11 @@ void Hook<Ret(Args...)>::Toggle(bool toggle)
 {
 	if (toggle) Enable();
 	else Disable();
+}
+
+template<typename Ret, typename ...Args>
+void Hook<Ret(Args...)>::ApplyQueued()
+{
+	if (MH_ApplyQueued() != MH_OK) std::cout << "HOOK FAILED QUEUE! " << std::endl;
 }
 
