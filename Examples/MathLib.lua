@@ -1,8 +1,4 @@
 --=MathLib
--- Include the above at the top of your TextBrick text, without the comment prefix "--"
-
---This is an example of a non-execution module. It is shared by execution modules and cannot be used as an execution module.
-
 local M = {}
 
 function M.clamp(x, lo, hi)
