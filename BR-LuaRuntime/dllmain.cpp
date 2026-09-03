@@ -8,7 +8,11 @@
 #include "Helpers.hpp"
 #include "LuaRuntime.hpp"
 
-//#define CONSOLE //Define when doing a console build. Always build in release
+#ifdef _DEBUG
+#define CONSOLE
+#elif _DEVELOPER
+#define CONSOLE
+#endif
 
 //Global variables
 HMODULE self = nullptr;
