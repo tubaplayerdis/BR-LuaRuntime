@@ -1,4 +1,5 @@
 --VectorLib
+-- Remove the comment prefex (--) above when using!
 local V = {}
     function V.new()
         local self = setmetatable({}, V)
@@ -8,9 +9,9 @@ local V = {}
         return self
     end
     function V.update()
-        self.x = GetInChannelVal(0);
-        self.y = GetInChannelVal(1);
-        self.z = GetInChannelVal(2);
+        self.x = In.Get(0);
+        self.y = In.Get(1);
+        self.z = In.Get(2);
     end
     function V.printDelta(Other)
         print("dx " .. self.x)
