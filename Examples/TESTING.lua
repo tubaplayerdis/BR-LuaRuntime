@@ -1,8 +1,9 @@
 --This example WILL NOT WORK normally. It has too many characters and is designed to be used as reference.
+--Remove the comments if you want to test this module
 
 --=TESTING
--- Remove the comment prefex (--) above when using!
-LDT = Store("LastDeltaTime")
+-- Remove the comment prefex (--) above when using in BR!
+LDT = Store("LastDeltaTime") --Finds and returns a reference to a Switch Brick of name: LastDeltaTime
 
 --Tick is ran by the associated switch brick
 function Tick(Delta)

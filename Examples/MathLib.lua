@@ -1,5 +1,5 @@
 --=MathLib
--- Remove the comment prefex (--) above when using!
+-- Remove the comment prefex (--) above when using in BR!
 local M = {}
 function M.clamp(x, lo, hi)
     if x < lo then return lo end
