@@ -1,6 +1,6 @@
 --=Main
+-- Remove the comment prefex (--) above when using!
 LDT = Store("LastDeltaTime")
-
 function Tick(Delta)
     local X = In.Get(0)
     local Z = In.Get(1)
