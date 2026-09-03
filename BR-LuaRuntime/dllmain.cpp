@@ -63,6 +63,7 @@ DWORD WINAPI MainThread(LPVOID lpReserved)
 
 		if (WaitForSingleObject(hShutdownEvent, 10) == 0)
 		{
+		    ResetEvent(hShutdownEvent);
 		    break;
 		}
     }
