@@ -1,9 +1,10 @@
+--This example WILL NOT WORK normally. It has too many characters and is designed to be used as reference.
+
 --=TESTING
--- Include the above at the top of your TextBrick text, without the comment prefix "--"
--- Remove the comments to use this code!
+-- Remove the comment prefex (--) above when using!
 LDT = Store("LastDeltaTime")
 
---This function HAS to be implemented globally in Execution modules
+--Tick is ran by the associated switch brick
 function Tick(Delta)
 	local X = In.Get(0) --Reads the bound brick on index 0's output channel value
 	local Z = In.Get(1) --Reads the bound brick on index 1's output channel value
