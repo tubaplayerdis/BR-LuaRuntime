@@ -13,7 +13,7 @@ std::wstring Helpers::to_wstring(const std::string& str)
 SDK::ABrickPlayerController* Helpers::GetBrickPlayerController()
 {
     SDK::APlayerController* PlayerController = SDK::UGameplayStatics::GetPlayerController(SDK::UWorld::GetWorld(), 0);
-    if (PlayerController)
+    if (PlayerController && PlayerController->IsA(SDK::ABrickPlayerController::StaticClass()))
     {
         return static_cast<SDK::ABrickPlayerController*>(PlayerController);
     }

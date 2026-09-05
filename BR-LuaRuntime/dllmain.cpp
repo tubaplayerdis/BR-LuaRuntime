@@ -3,9 +3,7 @@
 #include <windows.h>
 #include <Hooking/MinHook/MinHook.h>
 #include <BR-SDK.hpp>
-#include <Platform/Platform.h>
 
-#include "Helpers.hpp"
 #include "LuaRuntime.hpp"
 
 #ifdef _DEBUG
@@ -13,6 +11,52 @@
 #elif _DEVELOPER
 #define CONSOLE
 #endif
+
+#ifdef _DEVELOPER
+#define PLUGIN_NAME_BRICKRUST "Lua Runtime - Developer"
+#else
+#define PLUGIN_NAME_BRICKRUST "Lua Runtime"
+#endif
+
+#pragma region brickrust
+
+struct ModInfo
+{
+    const char* name;
+    const char* description;
+    const char* version;
+    const char* game_version;
+    const char* authors;
+};
+
+extern "C" {
+__declspec(dllexport) ModInfo mod_info()
+{
+    return ModInfo {
+        .name = PLUGIN_NAME_BRICKRUST,
+        .description = "Adds Lua functionality to Brick Rigs!",
+        .version = "1.0.0",
+        .game_version = "1.10.7",
+        .authors = "American_Stig (tbgit) @Discord"
+    };
+}
+
+__declspec(dllexport) void mod_init()
+{
+#ifdef _DEVELOPER
+    if (GetModuleHandle(L"BR-LuaRuntime_NoConsole.dll") != nullptr)
+    {
+        MessageBoxW(NULL, L"BR-LuaRuntime is double loaded. Please disable one of the binaries in the brickrust folder", L"BR-LuaRuntime", MB_OK | MB_ICONERROR);
+    }
+#else
+    if (GetModuleHandle(L"BR-LuaRuntime_Console.dll") != nullptr)
+    {
+        MessageBoxW(NULL, L"BR-LuaRuntime is double loaded. Please disable one of the binaries in the brickrust folder", L"BR-LuaRuntime", MB_OK | MB_ICONERROR);
+    }
+#endif
+    return;//Nothing atm
+}
+}
 
 //Global variables
 HMODULE self = nullptr;

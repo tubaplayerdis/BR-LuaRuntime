@@ -389,7 +389,19 @@ Hook<void(SDK::USwitchBrick*, float)> SwitchBrick_TickBrickHook("80 B9 ?? 01 00 
 [](SDK::USwitchBrick* This, float DeltaTime) -> void
 {
     auto PC = Helpers::GetBrickPlayerController();
+    if (!PC)
+    {
+        SwitchBrick_TickBrickHook.CallOriginalFunction(This, DeltaTime);
+        return;
+    }
+
     auto Veh = This->GetVehicle();
+    if (!Veh)
+    {
+        SwitchBrick_TickBrickHook.CallOriginalFunction(This, DeltaTime);
+        return;
+    }
+
 
     if (!VehicleAPI::Valid(PC, Veh))
     {
