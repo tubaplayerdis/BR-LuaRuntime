@@ -62,11 +62,11 @@ using namespace UC;
 namespace Offsets
 {
 	void FindOffsets();
-	int32 OGObjects();
-	int32 OAppendString();
-	int32 OGNames();
-	int32 OGWorld();
-	int32 OProcessEvent();
+	uintptr_t OGObjects();
+	uintptr_t OAppendString();
+	uintptr_t OGNames();
+	uintptr_t OGWorld();
+	uintptr_t OProcessEvent();
 	constexpr int32 ProcessEventIdx   = 0x00000044;//Very low chance of this changing
 }
 
@@ -296,7 +296,7 @@ public:
 private:
 	inline void InitGObjects()
 	{
-		GObjectsAddress = reinterpret_cast<void*>(InSDKUtils::GetImageBase() + Offsets::OGObjects());
+		GObjectsAddress = reinterpret_cast<void*>(Offsets::OGObjects());
 	}
 
 public:
@@ -369,7 +369,7 @@ public:
 
 	static void InitInternal()
 	{
-		AppendString = reinterpret_cast<void*>(InSDKUtils::GetImageBase() + Offsets::OAppendString());
+		AppendString = reinterpret_cast<void*>(Offsets::OAppendString());
 	}
 
 	bool IsNone() const

@@ -96,8 +96,9 @@ DWORD WINAPI MainThread(LPVOID lpReserved)
     std::cout << "Lua runtime is in developer mode - Press F6 to uninject" << std::endl;
 #endif
 
-    MH_Initialize(); //Initalize MinHook
     BR_SDK_Init();
+
+    MH_Initialize();
     LuaRuntime::Initialize(); //Initalize Lua Runtime
 
     while (true)
