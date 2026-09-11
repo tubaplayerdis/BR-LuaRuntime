@@ -1,6 +1,6 @@
 #pragma once
 
-#define LUA_MAX_INSTRUCTIONS_PER_TICK 10000
+#define LUA_MAX_INSTRUCTIONS_PER_TICK 100000
 #include <string>
 
 namespace LuaRuntime

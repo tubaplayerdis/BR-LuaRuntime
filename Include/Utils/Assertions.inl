@@ -643,7 +643,6 @@ static_assert(offsetof(UObject, Flags) == 0x000008, "Member 'UObject::Flags' has
 static_assert(offsetof(UObject, Index) == 0x00000C, "Member 'UObject::Index' has a wrong offset!"); \
 static_assert(offsetof(UObject, Class) == 0x000010, "Member 'UObject::Class' has a wrong offset!"); \
 static_assert(offsetof(UObject, Name) == 0x000018, "Member 'UObject::Name' has a wrong offset!"); \
-static_assert(offsetof(UObject, Outer) == 0x000020, "Member 'UObject::Outer' has a wrong offset!"); \
 
 #define DUMPER7_ASSERTS_UPackage \
 static_assert(alignof(UPackage) == 0x000008, "Wrong alignment on UPackage"); \

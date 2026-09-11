@@ -25,7 +25,8 @@ public:
 	int32                                         Index;                                             // 0x000C(0x0004)(NOT AUTO-GENERATED PROPERTY)
 	class UClass*                                 Class;                                             // 0x0010(0x0008)(NOT AUTO-GENERATED PROPERTY)
 	class FName                                   Name;                                              // 0x0018(0x0008)(NOT AUTO-GENERATED PROPERTY)
-	class UObject*                                Outer;                                             // 0x0020(0x0008)(NOT AUTO-GENERATED PROPERTY)
+	class UObject*								  OuterGameOnly;									 // 0x0020(0x0008)(NOT AUTO-GENERATED PROPERTY)
+	class UObject*                                Outer() const;                                     // 0x0028 (Outer in editor builds)
 
 public:
 	static class UObject* FindObjectFastImpl(const std::string& Name, EClassCastFlags RequiredType = EClassCastFlags::None);
@@ -64,7 +65,7 @@ public:
 
 	void ProcessEvent(class UFunction* Function, void* Parms) const
 	{
-		InSDKUtils::CallGameFunction(InSDKUtils::GetVirtualFunction<void(*)(const UObject*, class UFunction*, void*)>(this, Offsets::ProcessEventIdx), this, Function, Parms);
+		InSDKUtils::CallGameFunction(reinterpret_cast<void(*)(const UObject*, class UFunction*, void*)>(Offsets::OProcessEvent()), this, Function, Parms);
 	}
 
 	static class UClass* StaticClass()
