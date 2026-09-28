@@ -58,7 +58,6 @@ public:
 	void Destruct();
 	void Construct();
 	void BndEvt__WBP_ColorProperty_DisplayModeButton_K2Node_ComponentBoundEvent_1_OnClicked__DelegateSignature();
-	void BndEvt__WBP_ColorProperty_DisplayModeButton_K2Node_ComponentBoundEvent_0_OnUpdateContentStyle__DelegateSignature(EBrickUIColorStyle InColorStyle, EBrickUIStyleState InContentStyleState);
 	void SetCurrentColor(const struct FLinearColor& NewColor, const EValueChangedEventType EventType, bool bIsHSV);
 	void UpdateCurrentColor(bool bUpdateHex);
 

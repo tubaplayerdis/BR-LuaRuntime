@@ -10,40 +10,33 @@
 
 #include "Basic.hpp"
 
-#include "DeveloperSettings_classes.hpp"
 #include "PhysicsCore_structs.hpp"
-#include "Chaos_structs.hpp"
 #include "CoreUObject_classes.hpp"
+#include "Chaos_structs.hpp"
+#include "DeveloperSettings_classes.hpp"
 
 
 SDK_NAMESPACE_START
 
-// Class PhysicsCore.BodySetupCore
-// 0x0020 (0x0048 - 0x0028)
-class UBodySetupCore : public UObject
+// Class PhysicsCore.PhysicalMaterialPropertyBase
+// 0x0000 (0x0028 - 0x0028)
+class UPhysicalMaterialPropertyBase final : public UObject
 {
-public:
-	class FName                                   BoneName;                                          // 0x0028(0x0008)(Edit, ZeroConstructor, EditConst, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
-	EPhysicsType                                  PhysicsType;                                       // 0x0030(0x0001)(Edit, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
-	ECollisionTraceFlag                           CollisionTraceFlag;                                // 0x0031(0x0001)(Edit, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
-	EBodyCollisionResponse                        CollisionReponse;                                  // 0x0032(0x0001)(Edit, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
-	uint8                                         Pad_33[0x15];                                      // 0x0033(0x0015)(Fixing Struct Size After Last Property [ Dumper-7 ])
-
 public:
 	static class UClass* StaticClass()
 	{
-		STATIC_CLASS_IMPL("BodySetupCore")
+		STATIC_CLASS_IMPL("PhysicalMaterialPropertyBase")
 	}
 	static const class FName& StaticName()
 	{
-		STATIC_NAME_IMPL(L"BodySetupCore")
+		STATIC_NAME_IMPL(L"PhysicalMaterialPropertyBase")
 	}
-	static class UBodySetupCore* GetDefaultObj()
+	static class UPhysicalMaterialPropertyBase* GetDefaultObj()
 	{
-		return GetDefaultObjImpl<UBodySetupCore>();
+		return GetDefaultObjImpl<UPhysicalMaterialPropertyBase>();
 	}
 };
-DUMPER7_ASSERTS_UBodySetupCore;
+DUMPER7_ASSERTS_UPhysicalMaterialPropertyBase;
 
 // Class PhysicsCore.PhysicalMaterial
 // 0x0058 (0x0080 - 0x0028)
@@ -86,6 +79,33 @@ public:
 };
 DUMPER7_ASSERTS_UPhysicalMaterial;
 
+// Class PhysicsCore.BodySetupCore
+// 0x0020 (0x0048 - 0x0028)
+class UBodySetupCore : public UObject
+{
+public:
+	class FName                                   BoneName;                                          // 0x0028(0x0008)(Edit, ZeroConstructor, EditConst, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+	EPhysicsType                                  PhysicsType;                                       // 0x0030(0x0001)(Edit, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+	ECollisionTraceFlag                           CollisionTraceFlag;                                // 0x0031(0x0001)(Edit, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+	EBodyCollisionResponse                        CollisionReponse;                                  // 0x0032(0x0001)(Edit, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+	uint8                                         Pad_33[0x15];                                      // 0x0033(0x0015)(Fixing Struct Size After Last Property [ Dumper-7 ])
+
+public:
+	static class UClass* StaticClass()
+	{
+		STATIC_CLASS_IMPL("BodySetupCore")
+	}
+	static const class FName& StaticName()
+	{
+		STATIC_NAME_IMPL(L"BodySetupCore")
+	}
+	static class UBodySetupCore* GetDefaultObj()
+	{
+		return GetDefaultObjImpl<UBodySetupCore>();
+	}
+};
+DUMPER7_ASSERTS_UBodySetupCore;
+
 // Class PhysicsCore.ChaosPhysicalMaterial
 // 0x0020 (0x0048 - 0x0028)
 class UChaosPhysicalMaterial final : public UObject
@@ -115,26 +135,6 @@ public:
 	}
 };
 DUMPER7_ASSERTS_UChaosPhysicalMaterial;
-
-// Class PhysicsCore.PhysicalMaterialPropertyBase
-// 0x0000 (0x0028 - 0x0028)
-class UPhysicalMaterialPropertyBase final : public UObject
-{
-public:
-	static class UClass* StaticClass()
-	{
-		STATIC_CLASS_IMPL("PhysicalMaterialPropertyBase")
-	}
-	static const class FName& StaticName()
-	{
-		STATIC_NAME_IMPL(L"PhysicalMaterialPropertyBase")
-	}
-	static class UPhysicalMaterialPropertyBase* GetDefaultObj()
-	{
-		return GetDefaultObjImpl<UPhysicalMaterialPropertyBase>();
-	}
-};
-DUMPER7_ASSERTS_UPhysicalMaterialPropertyBase;
 
 // Class PhysicsCore.PhysicsSettingsCore
 // 0x00C0 (0x00F8 - 0x0038)

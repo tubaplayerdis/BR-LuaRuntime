@@ -16,7 +16,7 @@
 SDK_NAMESPACE_START
 
 // BlueprintGeneratedClass BP_SpinnerBrick.BP_SpinnerBrick_C
-// 0x0000 (0x0190 - 0x0190)
+// 0x0000 (0x01E0 - 0x01E0)
 class UBP_SpinnerBrick_C final : public USpinnerBrickStaticInfo
 {
 public:

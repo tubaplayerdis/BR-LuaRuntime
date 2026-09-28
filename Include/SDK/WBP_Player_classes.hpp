@@ -17,20 +17,19 @@
 SDK_NAMESPACE_START
 
 // WidgetBlueprintGeneratedClass WBP_Player.WBP_Player_C
-// 0x0010 (0x0530 - 0x0520)
+// 0x0010 (0x0540 - 0x0530)
 class UWBP_Player_C final : public UPlayerWidget
 {
 public:
-	struct FPointerToUberGraphFrame               UberGraphFrame;                                    // 0x0520(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
+	struct FPointerToUberGraphFrame               UberGraphFrame;                                    // 0x0530(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
 
 public:
+	void AddRestrictedAreaWidget(class URestrictedAreaWidget* InWidget_AddRestrictedAreaWidget);
+	void AddCrosshairWidget(class UCrosshairWidget* InWidget_AddCrosshairWidget);
+	void AddCameraBrickWidget(class UCameraBrickWidget* InWidget_AddCameraBrickWidget);
+	void AddCharacterDashboardWidget(class UUserWidget* InWidget_AddCharacterDashboardWidget);
+	void AddVehicleDashboardWidget(class UUserWidget* InWidget_AddVehicleDashboardWidget);
 	void ExecuteUbergraph_WBP_Player(int32 EntryPoint);
-	void AddCameraBrickWidget(class UCameraBrickWidget* InWidget);
-	void AddHealthBarWidget(class UHealthBarWidget* InWidget);
-	void AddCurrentItemWidget(class UCurrentItemWidget* InWidget);
-	void AddCrosshairWidget(class UCrosshairWidget* InWidget);
-	void AddDashboardWidget(class UDashboardWidget* InWidget);
-	void AddRestrictedAreaWidget(class URestrictedAreaWidget* InWidget);
 
 public:
 	static class UClass* StaticClass()

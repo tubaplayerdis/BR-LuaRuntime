@@ -16,7 +16,7 @@
 SDK_NAMESPACE_START
 
 // BlueprintGeneratedClass BP_SniperScope_StaticInfo.BP_SniperScope_StaticInfo_C
-// 0x0000 (0x0400 - 0x0400)
+// 0x0000 (0x0410 - 0x0410)
 class UBP_SniperScope_StaticInfo_C final : public USightStaticInfo
 {
 public:

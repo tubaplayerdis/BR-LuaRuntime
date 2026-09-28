@@ -17,6 +17,20 @@
 SDK_NAMESPACE_START
 SDK_PARAM_NAMESPACE_START
 
+// Function WBP_PagedListHeaderField.WBP_PagedListHeaderField_C.UpdateItem
+// 0x0028 (0x0028 - 0x0000)
+struct WBP_PagedListHeaderField_C_UpdateItem final
+{
+public:
+	bool                                          bNewVisible;                                       // 0x0000(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor)
+	uint8                                         Pad_1[0x7];                                        // 0x0001(0x0007)(Fixing Size After Last Property [ Dumper-7 ])
+	class FText                                   NewText;                                           // 0x0008(0x0018)(BlueprintVisible, BlueprintReadOnly, Parm)
+	EBrickUIColorStyle                            NewColorStyle;                                     // 0x0020(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	EBrickUITextStyle                             NewTextStyle;                                      // 0x0021(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	EBrickUIBrushStyle                            NewBrushStyle;                                     // 0x0022(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+};
+DUMPER7_ASSERTS_WBP_PagedListHeaderField_C_UpdateItem;
+
 // Function WBP_PagedListHeaderField.WBP_PagedListHeaderField_C.ExecuteUbergraph_WBP_PagedListHeaderField
 // 0x0028 (0x0028 - 0x0000)
 struct WBP_PagedListHeaderField_C_ExecuteUbergraph_WBP_PagedListHeaderField final
@@ -30,22 +44,10 @@ public:
 	class FText                                   K2Node_CustomEvent_NewText;                        // 0x0008(0x0018)()
 	EBrickUIColorStyle                            K2Node_CustomEvent_NewColorStyle;                  // 0x0020(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 	EBrickUITextStyle                             K2Node_CustomEvent_NewTextStyle;                   // 0x0021(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	ESlateVisibility                              K2Node_Select_Default;                             // 0x0022(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	EBrickUIBrushStyle                            K2Node_CustomEvent_NewBrushStyle;                  // 0x0022(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	ESlateVisibility                              K2Node_Select_Default;                             // 0x0023(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 };
 DUMPER7_ASSERTS_WBP_PagedListHeaderField_C_ExecuteUbergraph_WBP_PagedListHeaderField;
-
-// Function WBP_PagedListHeaderField.WBP_PagedListHeaderField_C.UpdateItem
-// 0x0028 (0x0028 - 0x0000)
-struct WBP_PagedListHeaderField_C_UpdateItem final
-{
-public:
-	bool                                          bNewVisible;                                       // 0x0000(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor)
-	uint8                                         Pad_1[0x7];                                        // 0x0001(0x0007)(Fixing Size After Last Property [ Dumper-7 ])
-	class FText                                   NewText;                                           // 0x0008(0x0018)(BlueprintVisible, BlueprintReadOnly, Parm)
-	EBrickUIColorStyle                            NewColorStyle;                                     // 0x0020(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	EBrickUITextStyle                             NewTextStyle;                                      // 0x0021(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-};
-DUMPER7_ASSERTS_WBP_PagedListHeaderField_C_UpdateItem;
 
 SDK_PARAM_NAMESPACE_END
 SDK_NAMESPACE_END

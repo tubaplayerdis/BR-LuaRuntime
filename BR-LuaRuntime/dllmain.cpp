@@ -30,32 +30,32 @@ struct ModInfo
 };
 
 extern "C" {
-__declspec(dllexport) ModInfo mod_info()
-{
-    return ModInfo {
-        .name = PLUGIN_NAME_BRICKRUST,
-        .description = "Adds Lua functionality to Brick Rigs!",
-        .version = "1.0.0",
-        .game_version = "1.10.7",
-        .authors = "American_Stig (tbgit) @Discord"
-    };
-}
+    __declspec(dllexport) ModInfo mod_info()
+    {
+        return ModInfo {
+            .name = PLUGIN_NAME_BRICKRUST,
+            .description = "Adds Lua functionality to Brick Rigs!",
+            .version = "1.0.1",
+            .game_version = "1.11.6",
+            .authors = "American_Stig (tbgit) @Discord"
+        };
+    }
 
-__declspec(dllexport) void mod_init()
-{
-#ifdef _DEVELOPER
-    if (GetModuleHandle(L"BR-LuaRuntime_NoConsole.dll") != nullptr)
+    __declspec(dllexport) void mod_init()
     {
-        MessageBoxW(NULL, L"BR-LuaRuntime is double loaded. Please disable one of the binaries in the brickrust folder", L"BR-LuaRuntime", MB_OK | MB_ICONERROR);
+    #ifdef _DEVELOPER
+        if (GetModuleHandle(L"BR-LuaRuntime_NoConsole.dll") != nullptr)
+        {
+            MessageBoxW(NULL, L"BR-LuaRuntime is double loaded. Please disable one of the binaries in the brickrust folder", L"BR-LuaRuntime", MB_OK | MB_ICONERROR);
+        }
+    #else
+        if (GetModuleHandle(L"BR-LuaRuntime_Console.dll") != nullptr)
+        {
+            MessageBoxW(NULL, L"BR-LuaRuntime is double loaded. Please disable one of the binaries in the brickrust folder", L"BR-LuaRuntime", MB_OK | MB_ICONERROR);
+        }
+    #endif
+        return;//Nothing atm
     }
-#else
-    if (GetModuleHandle(L"BR-LuaRuntime_Console.dll") != nullptr)
-    {
-        MessageBoxW(NULL, L"BR-LuaRuntime is double loaded. Please disable one of the binaries in the brickrust folder", L"BR-LuaRuntime", MB_OK | MB_ICONERROR);
-    }
-#endif
-    return;//Nothing atm
-}
 }
 
 //Global variables
@@ -65,6 +65,18 @@ FILE* pStdOut = nullptr;
 FILE* pStdErr = nullptr;
 PVOID pHandleVec = nullptr;
 HANDLE hShutdownEvent = nullptr;
+
+void SetupAttachConsole()
+{
+    #ifdef CONSOLE //If in debug version enable console.
+        (GetConsoleWindow() != NULL) ? AttachConsole(GetCurrentProcessId()) : AllocConsole();//Attach/Create the console.
+        freopen_s(&pStdIn, "CONIN$", "r", stdin);
+        freopen_s(&pStdOut, "CONOUT$", "w", stdout);
+        freopen_s(&pStdErr, "CONOUT$", "w", stderr);
+        SetConsoleTitleW(L"Brick Rigs Lua Runtime - Developer");
+        SetConsoleOutputCP(CP_UTF8);
+    #endif // _DEBUG
+}
 
 //Definied in execption_handler.cpp
 LONG WINAPI UpgradedExceptionHandler(PEXCEPTION_POINTERS ExceptionInfo);
@@ -80,14 +92,7 @@ DWORD WINAPI MainThread(LPVOID lpReserved)
     HMODULE hModule = static_cast<HMODULE>(lpReserved);
     self = hModule;
 
-#ifdef CONSOLE //If in debug version enable console.
-    AllocConsole();
-    freopen_s(&pStdIn, "CONIN$", "r", stdin);
-    freopen_s(&pStdOut, "CONOUT$", "w", stdout);
-    freopen_s(&pStdErr, "CONOUT$", "w", stderr);
-    SetConsoleTitleW(L"Brick Rigs Lua Runtime - Developer");
-    SetConsoleOutputCP(CP_UTF8);
-#endif // _DEBUG
+    SetupAttachConsole();
 
 #ifdef CONSOLE
     std::cout << "Brick Rigs Lua Runtime - American_Stig (tbgit) @Discord" << std::endl;

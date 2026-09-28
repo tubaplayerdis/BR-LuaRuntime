@@ -17,6 +17,7 @@ SDK_NAMESPACE_START
 
 // Class AssetRegistry.AssetRegistryImpl
 // 0x0828 (0x0850 - 0x0028)
+// Cast the IAssetRegisty into this lol.
 class UAssetRegistryImpl final : public UObject
 {
 public:

@@ -10,15 +10,25 @@
 
 #include "Basic.hpp"
 
+#include "Engine_structs.hpp"
 #include "BrickRigs_classes.hpp"
 
 
 SDK_NAMESPACE_START
 
 // WidgetBlueprintGeneratedClass WBP_BoolProperty.WBP_BoolProperty_C
-// 0x0000 (0x0288 - 0x0288)
+// 0x0010 (0x0290 - 0x0280)
 class UWBP_BoolProperty_C final : public UBoolPropertyWidget
 {
+public:
+	struct FPointerToUberGraphFrame               UberGraphFrame;                                    // 0x0280(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
+	class UWBP_BrickCheckBox_C*                   CheckBox;                                          // 0x0288(0x0008)(BlueprintVisible, ExportObject, ZeroConstructor, InstancedReference, IsPlainOldData, RepSkip, NoDestructor, PersistentInstance, HasGetValueTypeHash)
+
+public:
+	void ExecuteUbergraph_WBP_BoolProperty(int32 EntryPoint);
+	void BndEvt__WBP_BoolProperty_CheckBox_K2Node_ComponentBoundEvent_0_OnIsCheckedChanged__DelegateSignature(bool bNewChecked);
+	void UpdateValue(const bool bNewValue);
+
 public:
 	static class UClass* StaticClass()
 	{

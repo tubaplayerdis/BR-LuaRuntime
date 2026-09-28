@@ -27,7 +27,6 @@ public:
 
 public:
 	void BndEvt__Button_K2Node_ComponentBoundEvent_0_OnClicked__DelegateSignature();
-	void BndEvt__Button_K2Node_ComponentBoundEvent_1_OnUpdateContentStyle__DelegateSignature(EBrickUIColorStyle InColorStyle, EBrickUIStyleState InContentStyleState);
 	void UpdateColorStyle(EBrickUIColorStyle InColorStyle_UpdateColorStyle);
 	void ExecuteUbergraph_WBP_InteractionOption(int32 EntryPoint);
 

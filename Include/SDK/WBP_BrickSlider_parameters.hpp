@@ -10,10 +10,11 @@
 
 #include "Basic.hpp"
 
+#include "InputCore_structs.hpp"
 #include "SlateCore_structs.hpp"
 #include "UMG_structs.hpp"
+#include "BrickRigs_structs.hpp"
 #include "CoreUObject_structs.hpp"
-#include "InputCore_structs.hpp"
 
 
 SDK_NAMESPACE_START
@@ -47,48 +48,87 @@ public:
 };
 DUMPER7_ASSERTS_WBP_BrickSlider_C_CreateModifierHintWidget;
 
-// Function WBP_BrickSlider.WBP_BrickSlider_C.UpdateSliderPosition
-// 0x0004 (0x0004 - 0x0000)
-struct WBP_BrickSlider_C_UpdateSliderPosition final
+// Function WBP_BrickSlider.WBP_BrickSlider_C.UpdateIsDragging
+// 0x0001 (0x0001 - 0x0000)
+struct WBP_BrickSlider_C_UpdateIsDragging final
 {
 public:
-	float                                         NewValue;                                          // 0x0000(0x0004)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	bool                                          bIsDragging_UpdateIsDragging;                      // 0x0000(0x0001)(ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor)
 };
-DUMPER7_ASSERTS_WBP_BrickSlider_C_UpdateSliderPosition;
+DUMPER7_ASSERTS_WBP_BrickSlider_C_UpdateIsDragging;
+
+// Function WBP_BrickSlider.WBP_BrickSlider_C.UpdateIsReadOnly
+// 0x0001 (0x0001 - 0x0000)
+struct WBP_BrickSlider_C_UpdateIsReadOnly final
+{
+public:
+	bool                                          bNewReadOnly_UpdateIsReadOnly;                     // 0x0000(0x0001)(ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor)
+};
+DUMPER7_ASSERTS_WBP_BrickSlider_C_UpdateIsReadOnly;
 
 // Function WBP_BrickSlider.WBP_BrickSlider_C.PreConstruct
 // 0x0001 (0x0001 - 0x0000)
 struct WBP_BrickSlider_C_PreConstruct final
 {
 public:
-	bool                                          IsDesignTime;                                      // 0x0000(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor)
+	bool                                          IsDesignTime_PreConstruct;                         // 0x0000(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor)
 };
 DUMPER7_ASSERTS_WBP_BrickSlider_C_PreConstruct;
 
-// Function WBP_BrickSlider.WBP_BrickSlider_C.UpdateIsDragging
-// 0x0001 (0x0001 - 0x0000)
-struct WBP_BrickSlider_C_UpdateIsDragging final
+// Function WBP_BrickSlider.WBP_BrickSlider_C.UpdateSliderPosition
+// 0x0004 (0x0004 - 0x0000)
+struct WBP_BrickSlider_C_UpdateSliderPosition final
 {
 public:
-	bool                                          bIsDragging;                                       // 0x0000(0x0001)(ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor)
+	float                                         NewValue_UpdateSliderPosition;                     // 0x0000(0x0004)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 };
-DUMPER7_ASSERTS_WBP_BrickSlider_C_UpdateIsDragging;
+DUMPER7_ASSERTS_WBP_BrickSlider_C_UpdateSliderPosition;
+
+// Function WBP_BrickSlider.WBP_BrickSlider_C.UpdateButtonStyle
+// 0x0002 (0x0002 - 0x0000)
+struct WBP_BrickSlider_C_UpdateButtonStyle final
+{
+public:
+	EBrickUIColorStyle                            NewColorStyle_UpdateButtonStyle;                   // 0x0000(0x0001)(ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	EBrickUIBrushState                            NewBrushState_UpdateButtonStyle;                   // 0x0001(0x0001)(ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+};
+DUMPER7_ASSERTS_WBP_BrickSlider_C_UpdateButtonStyle;
 
 // Function WBP_BrickSlider.WBP_BrickSlider_C.ExecuteUbergraph_WBP_BrickSlider
-// 0x0038 (0x0038 - 0x0000)
+// 0x0048 (0x0048 - 0x0000)
 struct WBP_BrickSlider_C_ExecuteUbergraph_WBP_BrickSlider final
 {
 public:
 	int32                                         EntryPoint;                                        // 0x0000(0x0004)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	float                                         K2Node_Event_NewValue;                             // 0x0004(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	struct FSlateChildSize                        K2Node_MakeStruct_SlateChildSize;                  // 0x0008(0x0008)(NoDestructor)
+	bool                                          Temp_bool_Variable;                                // 0x0004(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor)
+	EBrickUIPaddingStyle                          Temp_byte_Variable;                                // 0x0005(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	EBrickUIPaddingStyle                          Temp_byte_Variable_1;                              // 0x0006(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	bool                                          Temp_bool_Variable_1;                              // 0x0007(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor)
+	EBrickUIBrushStyle                            Temp_byte_Variable_2;                              // 0x0008(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	EBrickUIBrushStyle                            Temp_byte_Variable_3;                              // 0x0009(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	bool                                          Temp_bool_Variable_2;                              // 0x000A(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor)
+	EBrickUIBrushStyle                            Temp_byte_Variable_4;                              // 0x000B(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	EBrickUIBrushStyle                            Temp_byte_Variable_5;                              // 0x000C(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	bool                                          Temp_bool_Variable_3;                              // 0x000D(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor)
+	EBrickUIColorStyle                            Temp_byte_Variable_6;                              // 0x000E(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	uint8                                         Pad_F[0x1];                                        // 0x000F(0x0001)(Fixing Size After Last Property [ Dumper-7 ])
 	class UHorizontalBoxSlot*                     CallFunc_SlotAsHorizontalBoxSlot_ReturnValue;      // 0x0010(0x0008)(ZeroConstructor, InstancedReference, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	float                                         CallFunc_Subtract_FloatFloat_ReturnValue;          // 0x0018(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	struct FSlateChildSize                        K2Node_MakeStruct_SlateChildSize_1;                // 0x001C(0x0008)(NoDestructor)
-	uint8                                         Pad_24[0x4];                                       // 0x0024(0x0004)(Fixing Size After Last Property [ Dumper-7 ])
-	class UHorizontalBoxSlot*                     CallFunc_SlotAsHorizontalBoxSlot_ReturnValue_1;    // 0x0028(0x0008)(ZeroConstructor, InstancedReference, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	bool                                          K2Node_Event_IsDesignTime;                         // 0x0030(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor)
-	bool                                          K2Node_Event_bIsDragging;                          // 0x0031(0x0001)(ConstParm, ZeroConstructor, IsPlainOldData, NoDestructor)
+	bool                                          K2Node_Event_bIsDragging;                          // 0x0018(0x0001)(ConstParm, ZeroConstructor, IsPlainOldData, NoDestructor)
+	bool                                          K2Node_Event_bNewReadOnly;                         // 0x0019(0x0001)(ConstParm, ZeroConstructor, IsPlainOldData, NoDestructor)
+	EBrickUIPaddingStyle                          K2Node_Select_Default;                             // 0x001A(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	EBrickUIBrushStyle                            K2Node_Select_Default_1;                           // 0x001B(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	bool                                          K2Node_Event_IsDesignTime;                         // 0x001C(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor)
+	EBrickUIBrushStyle                            K2Node_Select_Default_2;                           // 0x001D(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	uint8                                         Pad_1E[0x2];                                       // 0x001E(0x0002)(Fixing Size After Last Property [ Dumper-7 ])
+	class UHorizontalBoxSlot*                     CallFunc_SlotAsHorizontalBoxSlot_ReturnValue_1;    // 0x0020(0x0008)(ZeroConstructor, InstancedReference, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	float                                         K2Node_Event_NewValue;                             // 0x0028(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	struct FSlateChildSize                        K2Node_MakeStruct_SlateChildSize;                  // 0x002C(0x0008)(NoDestructor)
+	float                                         CallFunc_Subtract_FloatFloat_ReturnValue;          // 0x0034(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	struct FSlateChildSize                        K2Node_MakeStruct_SlateChildSize_1;                // 0x0038(0x0008)(NoDestructor)
+	EBrickUIColorStyle                            K2Node_Event_NewColorStyle;                        // 0x0040(0x0001)(ConstParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	EBrickUIBrushState                            K2Node_Event_NewBrushState;                        // 0x0041(0x0001)(ConstParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	bool                                          CallFunc_EqualEqual_ByteByte_ReturnValue;          // 0x0042(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor)
+	EBrickUIColorStyle                            K2Node_Select_Default_3;                           // 0x0043(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 };
 DUMPER7_ASSERTS_WBP_BrickSlider_C_ExecuteUbergraph_WBP_BrickSlider;
 

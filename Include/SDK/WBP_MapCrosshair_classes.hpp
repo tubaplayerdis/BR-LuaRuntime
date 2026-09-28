@@ -28,8 +28,7 @@ public:
 
 public:
 	void ExecuteUbergraph_WBP_MapCrosshair(int32 EntryPoint);
-	void SetStyleState(EBrickUIStyleState NewState);
-	void SetColorStyle(EBrickUIColorStyle NewStyle);
+	void SetColorStyle(const EBrickUIColorStyle NewStyle);
 
 public:
 	static class UClass* StaticClass()

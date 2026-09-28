@@ -16,7 +16,7 @@
 SDK_NAMESPACE_START
 
 // BlueprintGeneratedClass BP_BrickVehicle.BP_BrickVehicle_C
-// 0x0000 (0x0AC0 - 0x0AC0)
+// 0x0000 (0x0AD0 - 0x0AD0)
 class ABP_BrickVehicle_C final : public ABrickVehicle
 {
 public:

@@ -16,7 +16,7 @@
 SDK_NAMESPACE_START
 
 // BlueprintGeneratedClass BP_Pants_StaticInfo.BP_Pants_StaticInfo_C
-// 0x0000 (0x03A0 - 0x03A0)
+// 0x0000 (0x03B0 - 0x03B0)
 class UBP_Pants_StaticInfo_C final : public UWearableStaticInfo
 {
 public:

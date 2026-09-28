@@ -25,8 +25,8 @@ public:
 	struct FPointerToUberGraphFrame               UberGraphFrame;                                    // 0x0298(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
 
 public:
+	void UpdateColorStyle(const EBrickUIColorStyle InColorStyle_UpdateColorStyle);
 	void ExecuteUbergraph_WBP_PropertyContainerButton(int32 EntryPoint);
-	void BndEvt__WBP_PropertyContainerButton_Button_K2Node_ComponentBoundEvent_0_OnUpdateContentStyle__DelegateSignature(EBrickUIColorStyle InColorStyle, EBrickUIStyleState InContentStyleState);
 
 public:
 	static class UClass* StaticClass()

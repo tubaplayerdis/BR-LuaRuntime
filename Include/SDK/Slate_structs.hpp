@@ -10,8 +10,8 @@
 
 #include "Basic.hpp"
 
-#include "CoreUObject_structs.hpp"
 #include "InputCore_structs.hpp"
+#include "CoreUObject_structs.hpp"
 
 
 SDK_NAMESPACE_START
@@ -261,15 +261,6 @@ public:
 };
 DUMPER7_ASSERTS_FInputChord;
 
-// ScriptStruct Slate.CustomizedToolMenuNameArray
-// 0x0010 (0x0010 - 0x0000)
-struct FCustomizedToolMenuNameArray final
-{
-public:
-	TArray<class FName>                           Names;                                             // 0x0000(0x0010)(ZeroConstructor, NativeAccessSpecifierPublic)
-};
-DUMPER7_ASSERTS_FCustomizedToolMenuNameArray;
-
 // ScriptStruct Slate.Anchors
 // 0x0010 (0x0010 - 0x0000)
 struct FAnchors final
@@ -288,6 +279,15 @@ public:
 	ECustomizedToolMenuVisibility                 Visibility;                                        // 0x0000(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
 };
 DUMPER7_ASSERTS_FCustomizedToolMenuSection;
+
+// ScriptStruct Slate.CustomizedToolMenuNameArray
+// 0x0010 (0x0010 - 0x0000)
+struct FCustomizedToolMenuNameArray final
+{
+public:
+	TArray<class FName>                           Names;                                             // 0x0000(0x0010)(ZeroConstructor, NativeAccessSpecifierPublic)
+};
+DUMPER7_ASSERTS_FCustomizedToolMenuNameArray;
 
 // ScriptStruct Slate.CustomizedToolMenu
 // 0x01E8 (0x01E8 - 0x0000)

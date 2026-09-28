@@ -10,15 +10,27 @@
 
 #include "Basic.hpp"
 
+#include "Engine_structs.hpp"
+#include "UMG_structs.hpp"
 #include "BrickRigs_classes.hpp"
 
 
 SDK_NAMESPACE_START
 
 // WidgetBlueprintGeneratedClass WBP_UGCTagsProperty.WBP_UGCTagsProperty_C
-// 0x0000 (0x0298 - 0x0298)
+// 0x0018 (0x02B0 - 0x0298)
 class UWBP_UGCTagsProperty_C final : public UUGCTagsPropertyWidget
 {
+public:
+	struct FPointerToUberGraphFrame               UberGraphFrame;                                    // 0x0298(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
+	class UWBP_BrickButton_C*                     ClearButton;                                       // 0x02A0(0x0008)(BlueprintVisible, ExportObject, ZeroConstructor, InstancedReference, IsPlainOldData, RepSkip, NoDestructor, PersistentInstance, HasGetValueTypeHash)
+	class UBrickImage*                            ClearIconImage;                                    // 0x02A8(0x0008)(BlueprintVisible, ExportObject, ZeroConstructor, InstancedReference, IsPlainOldData, RepSkip, NoDestructor, PersistentInstance, HasGetValueTypeHash)
+
+public:
+	void ExecuteUbergraph_WBP_UGCTagsProperty(int32 EntryPoint);
+	void UpdateUGCTagsProperty(const bool bIsFilterTags, const bool bAnyTagsSelected);
+	void BndEvt__WBP_UGCTagsProperty_ClearButton_K2Node_ComponentBoundEvent_0_OnClicked__DelegateSignature();
+
 public:
 	static class UClass* StaticClass()
 	{

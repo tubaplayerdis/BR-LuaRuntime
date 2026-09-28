@@ -16,6 +16,35 @@
 SDK_NAMESPACE_START
 SDK_PARAM_NAMESPACE_START
 
+// Function WBP_PropertyCategory.WBP_PropertyCategory_C.UpdateCategory
+// 0x0018 (0x0018 - 0x0000)
+struct WBP_PropertyCategory_C_UpdateCategory final
+{
+public:
+	class FText                                   DisplayName_UpdateCategory;                        // 0x0000(0x0018)(ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, OutParm, ReferenceParm)
+};
+DUMPER7_ASSERTS_WBP_PropertyCategory_C_UpdateCategory;
+
+// Function WBP_PropertyCategory.WBP_PropertyCategory_C.UpdatePropertyContainerWidgetSlot
+// 0x0010 (0x0010 - 0x0000)
+struct WBP_PropertyCategory_C_UpdatePropertyContainerWidgetSlot final
+{
+public:
+	class UPropertyContainerWidget*               Widget_UpdatePropertyContainerWidgetSlot;          // 0x0000(0x0008)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, InstancedReference, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	int32                                         Index_UpdatePropertyContainerWidgetSlot;           // 0x0008(0x0004)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	int32                                         NumPerRow_UpdatePropertyContainerWidgetSlot;       // 0x000C(0x0004)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+};
+DUMPER7_ASSERTS_WBP_PropertyCategory_C_UpdatePropertyContainerWidgetSlot;
+
+// Function WBP_PropertyCategory.WBP_PropertyCategory_C.AddPropertyContainerWidget
+// 0x0008 (0x0008 - 0x0000)
+struct WBP_PropertyCategory_C_AddPropertyContainerWidget final
+{
+public:
+	class UPropertyContainerWidget*               Widget_AddPropertyContainerWidget;                 // 0x0000(0x0008)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, InstancedReference, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+};
+DUMPER7_ASSERTS_WBP_PropertyCategory_C_AddPropertyContainerWidget;
+
 // Function WBP_PropertyCategory.WBP_PropertyCategory_C.ExecuteUbergraph_WBP_PropertyCategory
 // 0x0058 (0x0058 - 0x0000)
 struct WBP_PropertyCategory_C_ExecuteUbergraph_WBP_PropertyCategory final
@@ -40,35 +69,6 @@ public:
 	class UPanelSlot*                             CallFunc_AddChild_ReturnValue;                     // 0x0050(0x0008)(ZeroConstructor, InstancedReference, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 };
 DUMPER7_ASSERTS_WBP_PropertyCategory_C_ExecuteUbergraph_WBP_PropertyCategory;
-
-// Function WBP_PropertyCategory.WBP_PropertyCategory_C.AddPropertyContainerWidget
-// 0x0008 (0x0008 - 0x0000)
-struct WBP_PropertyCategory_C_AddPropertyContainerWidget final
-{
-public:
-	class UPropertyContainerWidget*               Widget;                                            // 0x0000(0x0008)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, InstancedReference, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-};
-DUMPER7_ASSERTS_WBP_PropertyCategory_C_AddPropertyContainerWidget;
-
-// Function WBP_PropertyCategory.WBP_PropertyCategory_C.UpdatePropertyContainerWidgetSlot
-// 0x0010 (0x0010 - 0x0000)
-struct WBP_PropertyCategory_C_UpdatePropertyContainerWidgetSlot final
-{
-public:
-	class UPropertyContainerWidget*               Widget;                                            // 0x0000(0x0008)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, InstancedReference, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	int32                                         Index_0;                                           // 0x0008(0x0004)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	int32                                         NumPerRow;                                         // 0x000C(0x0004)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-};
-DUMPER7_ASSERTS_WBP_PropertyCategory_C_UpdatePropertyContainerWidgetSlot;
-
-// Function WBP_PropertyCategory.WBP_PropertyCategory_C.UpdateCategory
-// 0x0018 (0x0018 - 0x0000)
-struct WBP_PropertyCategory_C_UpdateCategory final
-{
-public:
-	class FText                                   DisplayName;                                       // 0x0000(0x0018)(ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, OutParm, ReferenceParm)
-};
-DUMPER7_ASSERTS_WBP_PropertyCategory_C_UpdateCategory;
 
 SDK_PARAM_NAMESPACE_END
 SDK_NAMESPACE_END

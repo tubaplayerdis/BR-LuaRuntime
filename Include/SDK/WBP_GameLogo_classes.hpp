@@ -12,7 +12,6 @@
 
 #include "Engine_structs.hpp"
 #include "GameLogoEnum_structs.hpp"
-#include "BrickRigs_structs.hpp"
 #include "UMG_classes.hpp"
 
 

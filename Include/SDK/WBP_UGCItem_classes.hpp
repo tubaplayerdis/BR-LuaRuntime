@@ -12,7 +12,6 @@
 
 #include "Engine_structs.hpp"
 #include "UMG_structs.hpp"
-#include "BrickRigs_structs.hpp"
 #include "BrickRigs_classes.hpp"
 
 
@@ -29,7 +28,6 @@ public:
 public:
 	void ExecuteUbergraph_WBP_UGCItem(int32 EntryPoint);
 	void UpdateItemWidget(bool bInIsSelected, bool bInIsLegacyFile, bool bInHasAutoSave, bool bInIsDedicatedAutoSave);
-	void BndEvt__Button_K2Node_ComponentBoundEvent_0_OnUpdateContentStyle__DelegateSignature(EBrickUIColorStyle InColorStyle, EBrickUIStyleState InContentStyleState);
 
 public:
 	static class UClass* StaticClass()

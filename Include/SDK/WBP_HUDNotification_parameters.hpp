@@ -27,18 +27,17 @@ public:
 DUMPER7_ASSERTS_WBP_HUDNotification_C_UpdateIsThumbnailNotification;
 
 // Function WBP_HUDNotification.WBP_HUDNotification_C.InitializeNotification
-// 0x0028 (0x0028 - 0x0000)
+// 0x0048 (0x0048 - 0x0000)
 struct WBP_HUDNotification_C_InitializeNotification final
 {
 public:
-	struct FBrickUIIconSlot                       InIconSlot_InitializeNotification;                 // 0x0000(0x0008)(BlueprintVisible, BlueprintReadOnly, Parm, NoDestructor)
-	class FText                                   InText_InitializeNotification;                     // 0x0008(0x0018)(ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, OutParm, ReferenceParm)
-	EBrickUIColorStyle                            InColorStyle_InitializeNotification;               // 0x0020(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	struct FDisplayInfo                           InDisplayInfo_InitializeNotification;              // 0x0000(0x0040)(ConstParm, BlueprintVisible, BlueprintReadOnly, Parm)
+	EBrickUIColorStyle                            InColorStyle_InitializeNotification;               // 0x0040(0x0001)(ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 };
 DUMPER7_ASSERTS_WBP_HUDNotification_C_InitializeNotification;
 
 // Function WBP_HUDNotification.WBP_HUDNotification_C.ExecuteUbergraph_WBP_HUDNotification
-// 0x0058 (0x0058 - 0x0000)
+// 0x0078 (0x0078 - 0x0000)
 struct WBP_HUDNotification_C_ExecuteUbergraph_WBP_HUDNotification final
 {
 public:
@@ -58,9 +57,8 @@ public:
 	ESlateVisibility                              K2Node_Select_Default_1;                           // 0x0021(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 	uint8                                         Pad_22[0x6];                                       // 0x0022(0x0006)(Fixing Size After Last Property [ Dumper-7 ])
 	class UUMGSequencePlayer*                     CallFunc_PlayAnimationTimeRange_ReturnValue;       // 0x0028(0x0008)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	struct FBrickUIIconSlot                       K2Node_Event_InIconSlot;                           // 0x0030(0x0008)(NoDestructor)
-	class FText                                   K2Node_Event_InText;                               // 0x0038(0x0018)(ConstParm)
-	EBrickUIColorStyle                            K2Node_Event_InColorStyle;                         // 0x0050(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	struct FDisplayInfo                           K2Node_Event_InDisplayInfo;                        // 0x0030(0x0040)(ConstParm)
+	EBrickUIColorStyle                            K2Node_Event_InColorStyle;                         // 0x0070(0x0001)(ConstParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 };
 DUMPER7_ASSERTS_WBP_HUDNotification_C_ExecuteUbergraph_WBP_HUDNotification;
 

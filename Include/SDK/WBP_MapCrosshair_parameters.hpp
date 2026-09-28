@@ -22,26 +22,16 @@ struct WBP_MapCrosshair_C_ExecuteUbergraph_WBP_MapCrosshair final
 {
 public:
 	int32                                         EntryPoint;                                        // 0x0000(0x0004)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	EBrickUIColorStyle                            K2Node_Event_NewStyle;                             // 0x0004(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	EBrickUIStyleState                            K2Node_Event_NewState;                             // 0x0005(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	EBrickUIColorStyle                            K2Node_Event_NewStyle;                             // 0x0004(0x0001)(ConstParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 };
 DUMPER7_ASSERTS_WBP_MapCrosshair_C_ExecuteUbergraph_WBP_MapCrosshair;
-
-// Function WBP_MapCrosshair.WBP_MapCrosshair_C.SetStyleState
-// 0x0001 (0x0001 - 0x0000)
-struct WBP_MapCrosshair_C_SetStyleState final
-{
-public:
-	EBrickUIStyleState                            NewState;                                          // 0x0000(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-};
-DUMPER7_ASSERTS_WBP_MapCrosshair_C_SetStyleState;
 
 // Function WBP_MapCrosshair.WBP_MapCrosshair_C.SetColorStyle
 // 0x0001 (0x0001 - 0x0000)
 struct WBP_MapCrosshair_C_SetColorStyle final
 {
 public:
-	EBrickUIColorStyle                            NewStyle;                                          // 0x0000(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	EBrickUIColorStyle                            NewStyle;                                          // 0x0000(0x0001)(ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 };
 DUMPER7_ASSERTS_WBP_MapCrosshair_C_SetColorStyle;
 

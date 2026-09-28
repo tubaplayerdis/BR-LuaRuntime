@@ -16,7 +16,7 @@
 SDK_NAMESPACE_START
 
 // BlueprintGeneratedClass BP_Paint_StaticInfo.BP_Paint_StaticInfo_C
-// 0x0000 (0x0390 - 0x0390)
+// 0x0000 (0x03A0 - 0x03A0)
 class UBP_Paint_StaticInfo_C : public UPaintAttachmentStaticInfo
 {
 public:

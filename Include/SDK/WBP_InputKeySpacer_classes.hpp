@@ -10,24 +10,17 @@
 
 #include "Basic.hpp"
 
-#include "Engine_structs.hpp"
-#include "BrickRigs_structs.hpp"
 #include "UMG_classes.hpp"
 
 
 SDK_NAMESPACE_START
 
 // WidgetBlueprintGeneratedClass WBP_InputKeySpacer.WBP_InputKeySpacer_C
-// 0x0010 (0x0270 - 0x0260)
+// 0x0008 (0x0268 - 0x0260)
 class UWBP_InputKeySpacer_C final : public UUserWidget
 {
 public:
-	struct FPointerToUberGraphFrame               UberGraphFrame;                                    // 0x0260(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
-	class UBrickImage*                            Image;                                             // 0x0268(0x0008)(BlueprintVisible, ExportObject, ZeroConstructor, InstancedReference, IsPlainOldData, RepSkip, NoDestructor, PersistentInstance, HasGetValueTypeHash)
-
-public:
-	void ExecuteUbergraph_WBP_InputKeySpacer(int32 EntryPoint);
-	void UpdateStyleState(EBrickUIColorStyle NewStyle, EBrickUIStyleState NewState);
+	class UBrickImage*                            Image;                                             // 0x0260(0x0008)(BlueprintVisible, ExportObject, ZeroConstructor, InstancedReference, IsPlainOldData, RepSkip, NoDestructor, PersistentInstance, HasGetValueTypeHash)
 
 public:
 	static class UClass* StaticClass()

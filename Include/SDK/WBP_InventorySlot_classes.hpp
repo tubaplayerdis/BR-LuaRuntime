@@ -29,7 +29,6 @@ public:
 	void ExecuteUbergraph_WBP_InventorySlot(int32 EntryPoint);
 	void UpdateSlotApperance(bool bInIsDragWidget, bool bInIsSpecialSlot, bool bInIsValidSlot, bool bInCanDrag, bool bInIsDragging, bool bInCanDrop, bool bInDropReplace, bool bInIsDragOver);
 	void AddSubInventoryWidget(class UInventoryContainerWidget* Widget);
-	void BndEvt__Button_K2Node_ComponentBoundEvent_0_OnUpdateContentStyle__DelegateSignature(EBrickUIColorStyle InColorStyle, EBrickUIStyleState InContentStyleState);
 
 public:
 	static class UClass* StaticClass()

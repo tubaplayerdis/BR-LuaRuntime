@@ -16,7 +16,7 @@
 SDK_NAMESPACE_START
 
 // BlueprintGeneratedClass BP_BrickSpectatorPawn.BP_BrickSpectatorPawn_C
-// 0x0000 (0x0530 - 0x0530)
+// 0x0000 (0x0520 - 0x0520)
 class ABP_BrickSpectatorPawn_C final : public ABrickSpectatorPawn
 {
 public:

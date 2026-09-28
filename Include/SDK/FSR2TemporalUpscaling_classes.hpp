@@ -10,8 +10,8 @@
 
 #include "Basic.hpp"
 
-#include "FSR2TemporalUpscaling_structs.hpp"
 #include "Engine_structs.hpp"
+#include "FSR2TemporalUpscaling_structs.hpp"
 #include "DeveloperSettings_classes.hpp"
 
 

@@ -19,18 +19,18 @@
 SDK_NAMESPACE_START
 
 // WidgetBlueprintGeneratedClass WBP_UGCBrowser.WBP_UGCBrowser_C
-// 0x0048 (0x03B0 - 0x0368)
+// 0x0048 (0x0400 - 0x03B8)
 class UWBP_UGCBrowser_C final : public UUGCBrowserWidget
 {
 public:
-	struct FPointerToUberGraphFrame               UberGraphFrame;                                    // 0x0368(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
-	EPlayerSpawnResult                            Can_Spawn_Result;                                  // 0x0370(0x0001)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	uint8                                         Pad_371[0x3];                                      // 0x0371(0x0003)(Fixing Size After Last Property [ Dumper-7 ])
-	int32                                         Num_Bricks;                                        // 0x0374(0x0004)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	struct FVehicleSpawnProperties                SpawnProps;                                        // 0x0378(0x0018)(Edit, BlueprintVisible, DisableEditOnInstance, NoDestructor)
-	bool                                          Can_Spawn;                                         // 0x0390(0x0001)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor)
-	uint8                                         Pad_391[0x7];                                      // 0x0391(0x0007)(Fixing Size After Last Property [ Dumper-7 ])
-	class FText                                   Spawn_Failure_Text;                                // 0x0398(0x0018)(Edit, BlueprintVisible, DisableEditOnInstance)
+	struct FPointerToUberGraphFrame               UberGraphFrame;                                    // 0x03B8(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
+	EPlayerSpawnResult                            Can_Spawn_Result;                                  // 0x03C0(0x0001)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	uint8                                         Pad_3C1[0x3];                                      // 0x03C1(0x0003)(Fixing Size After Last Property [ Dumper-7 ])
+	int32                                         Num_Bricks;                                        // 0x03C4(0x0004)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	struct FVehicleSpawnProperties                SpawnProps;                                        // 0x03C8(0x0018)(Edit, BlueprintVisible, DisableEditOnInstance, NoDestructor)
+	bool                                          Can_Spawn;                                         // 0x03E0(0x0001)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor)
+	uint8                                         Pad_3E1[0x7];                                      // 0x03E1(0x0007)(Fixing Size After Last Property [ Dumper-7 ])
+	class FText                                   Spawn_Failure_Text;                                // 0x03E8(0x0018)(Edit, BlueprintVisible, DisableEditOnInstance)
 
 public:
 	void ExecuteUbergraph_WBP_UGCBrowser(int32 EntryPoint);

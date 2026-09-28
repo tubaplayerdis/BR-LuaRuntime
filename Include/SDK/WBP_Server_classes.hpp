@@ -30,9 +30,8 @@ public:
 public:
 	void ExecuteUbergraph_WBP_Server(int32 EntryPoint);
 	void UpdateServer(const struct FBrickOnlineSessionInfo& SessionInfo);
-	void BndEvt__Button_K2Node_ComponentBoundEvent_0_OnUpdateContentStyle__DelegateSignature(EBrickUIColorStyle InColorStyle, EBrickUIStyleState InContentStyleState);
 
-	int32 GetModIconSlot(bool bHasMods, bool bHasSameMods, bool bAllowDifferentMods) const;
+	void GetModIconSlot(bool bHasMods, bool bHasSameMods, bool bAllowDifferentMods, TSoftObjectPtr<class UTexture2D>* Icon, bool* bEnabled) const;
 
 public:
 	static class UClass* StaticClass()

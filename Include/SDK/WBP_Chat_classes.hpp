@@ -26,8 +26,8 @@ public:
 	class UBrickBorder*                           WarningBorder;                                     // 0x02B8(0x0008)(BlueprintVisible, ExportObject, ZeroConstructor, InstancedReference, IsPlainOldData, RepSkip, NoDestructor, PersistentInstance, HasGetValueTypeHash)
 
 public:
-	void UpdateIsFocused(bool bNewFocused_UpdateIsFocused);
 	void UpdateIsTyping(bool bNewTyping_UpdateIsTyping);
+	void UpdateScrollBoxVisibility(bool bNewVisible_UpdateScrollBoxVisibility);
 	void ExecuteUbergraph_WBP_Chat(int32 EntryPoint);
 
 public:

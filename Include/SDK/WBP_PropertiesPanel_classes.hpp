@@ -25,8 +25,8 @@ public:
 	class UBrickVerticalBox*                      MainBox;                                           // 0x02D8(0x0008)(BlueprintVisible, ExportObject, ZeroConstructor, InstancedReference, IsPlainOldData, RepSkip, NoDestructor, PersistentInstance, HasGetValueTypeHash)
 
 public:
+	void AddCategoryWidget(class UPropertyCategoryWidget* Widget_AddCategoryWidget, int32 Index_AddCategoryWidget);
 	void ExecuteUbergraph_WBP_PropertiesPanel(int32 EntryPoint);
-	void AddCategoryWidget(class UPropertyCategoryWidget* Widget, int32 Index_0);
 
 public:
 	static class UClass* StaticClass()

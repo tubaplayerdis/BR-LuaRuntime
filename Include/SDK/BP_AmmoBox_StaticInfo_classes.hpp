@@ -16,7 +16,7 @@
 SDK_NAMESPACE_START
 
 // BlueprintGeneratedClass BP_AmmoBox_StaticInfo.BP_AmmoBox_StaticInfo_C
-// 0x0000 (0x03C0 - 0x03C0)
+// 0x0000 (0x03D0 - 0x03D0)
 class UBP_AmmoBox_StaticInfo_C : public UAmmoBoxStaticInfo
 {
 public:

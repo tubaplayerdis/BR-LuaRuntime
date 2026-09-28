@@ -14,6 +14,24 @@
 SDK_NAMESPACE_START
 SDK_PARAM_NAMESPACE_START
 
+// Function WBP_HUDIconContainer.WBP_HUDIconContainer_C.AddInteractionWidget
+// 0x0008 (0x0008 - 0x0000)
+struct WBP_HUDIconContainer_C_AddInteractionWidget final
+{
+public:
+	class UInteractionWidget*                     Widget_AddInteractionWidget;                       // 0x0000(0x0008)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, InstancedReference, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+};
+DUMPER7_ASSERTS_WBP_HUDIconContainer_C_AddInteractionWidget;
+
+// Function WBP_HUDIconContainer.WBP_HUDIconContainer_C.AddCrosshairWidgets
+// 0x0010 (0x0010 - 0x0000)
+struct WBP_HUDIconContainer_C_AddCrosshairWidgets final
+{
+public:
+	TArray<class UMapCrosshairWidget*>            Widgets_AddCrosshairWidgets;                       // 0x0000(0x0010)(ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, OutParm, ReferenceParm, ContainsInstancedReference)
+};
+DUMPER7_ASSERTS_WBP_HUDIconContainer_C_AddCrosshairWidgets;
+
 // Function WBP_HUDIconContainer.WBP_HUDIconContainer_C.ExecuteUbergraph_WBP_HUDIconContainer
 // 0x0050 (0x0050 - 0x0000)
 struct WBP_HUDIconContainer_C_ExecuteUbergraph_WBP_HUDIconContainer final
@@ -33,24 +51,6 @@ public:
 	class UGridSlot*                              CallFunc_AddChildToGrid_ReturnValue_2;             // 0x0048(0x0008)(ZeroConstructor, InstancedReference, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 };
 DUMPER7_ASSERTS_WBP_HUDIconContainer_C_ExecuteUbergraph_WBP_HUDIconContainer;
-
-// Function WBP_HUDIconContainer.WBP_HUDIconContainer_C.AddCrosshairWidgets
-// 0x0010 (0x0010 - 0x0000)
-struct WBP_HUDIconContainer_C_AddCrosshairWidgets final
-{
-public:
-	TArray<class UMapCrosshairWidget*>            Widgets;                                           // 0x0000(0x0010)(ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, OutParm, ReferenceParm, ContainsInstancedReference)
-};
-DUMPER7_ASSERTS_WBP_HUDIconContainer_C_AddCrosshairWidgets;
-
-// Function WBP_HUDIconContainer.WBP_HUDIconContainer_C.AddInteractionWidget
-// 0x0008 (0x0008 - 0x0000)
-struct WBP_HUDIconContainer_C_AddInteractionWidget final
-{
-public:
-	class UInteractionWidget*                     Widget;                                            // 0x0000(0x0008)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, InstancedReference, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-};
-DUMPER7_ASSERTS_WBP_HUDIconContainer_C_AddInteractionWidget;
 
 SDK_PARAM_NAMESPACE_END
 SDK_NAMESPACE_END

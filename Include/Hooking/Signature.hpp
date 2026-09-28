@@ -20,7 +20,7 @@
 */
 class Signature
 {
-    std::string Sig;
+    const std::string Sig;
 public:
 
     /**
@@ -29,6 +29,8 @@ public:
      * @param signature Signature of the function. Uses the format: "48 89 7C 24 ?? 41 56 48 83 EC ?? 48 8B FA 4C 8B F1 E8 ?? ?? ?? ??".
      */
     explicit Signature(const char* signature) noexcept;
+
+    explicit Signature(const char* signature, const char* module, bool call_target) noexcept;
 
     /**
      * @brief Creates an address only signature. For use by Hook class.
@@ -48,6 +50,17 @@ public:
      */
     std::string GetSig() const;
 
+    enum SearchContext
+    {
+        NONE  = 0,
+        TEXT  = 1 << 0,
+        DATA  = 1 << 1,
+        RDATA = 1 << 2,
+        BSS   = 1 << 3,
+    };
+
+    static uintptr_t InternalResolveSignature(const std::string& signature, SearchContext context, const char* Module = nullptr, bool call_target = false) noexcept;
+
 };
 
 template <typename>
@@ -63,6 +76,11 @@ public:
     }
 
     Function(const char* ptr) noexcept : Signature(ptr)
+    {
+        if (GetPtr() == 0) std::cerr << "UNRESOLVED SIG: " << GetSig() << std::endl;
+    }
+
+    Function(const char* ptr, const char* module, bool call_target = false) noexcept : Signature(ptr, module, call_target)
     {
         if (GetPtr() == 0) std::cerr << "UNRESOLVED SIG: " << GetSig() << std::endl;
     }

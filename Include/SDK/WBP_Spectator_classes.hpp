@@ -11,7 +11,6 @@
 #include "Basic.hpp"
 
 #include "Engine_structs.hpp"
-#include "BrickRigs_structs.hpp"
 #include "BrickRigs_classes.hpp"
 
 
@@ -31,8 +30,6 @@ public:
 
 public:
 	void ExecuteUbergraph_WBP_Spectator(int32 EntryPoint);
-	void BndEvt__NextPlayerButton_K2Node_ComponentBoundEvent_3_OnUpdateContentStyle__DelegateSignature(EBrickUIColorStyle InColorStyle, EBrickUIStyleState InContentStyleState);
-	void BndEvt__PrevPlayerButton_K2Node_ComponentBoundEvent_2_OnUpdateContentStyle__DelegateSignature(EBrickUIColorStyle InColorStyle, EBrickUIStyleState InContentStyleState);
 	void BndEvt__NextPlayerButton_K2Node_ComponentBoundEvent_1_OnClicked__DelegateSignature();
 	void BndEvt__PrevPlayerButton_K2Node_ComponentBoundEvent_0_OnClicked__DelegateSignature();
 	void UpdateSpectatedPlayer(const class FText& PlayerName, bool bIsValidPlayer);

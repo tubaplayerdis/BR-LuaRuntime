@@ -11,7 +11,6 @@
 #include "Basic.hpp"
 
 #include "Engine_structs.hpp"
-#include "BrickRigs_structs.hpp"
 #include "BrickRigs_classes.hpp"
 
 
@@ -30,7 +29,6 @@ public:
 public:
 	void ExecuteUbergraph_WBP_InputMappingProperty(int32 EntryPoint);
 	void AddKeyWidget(class UInputMappingKeyWidget* Widget, int32 Index_0);
-	void BndEvt__AddButton_K2Node_ComponentBoundEvent_1_OnUpdateContentStyle__DelegateSignature(EBrickUIColorStyle InColorStyle, EBrickUIStyleState InContentStyleState);
 	void BndEvt__AddButton_K2Node_ComponentBoundEvent_0_OnClicked__DelegateSignature();
 	void UpdateCanAddMapping(bool bCanAdd);
 

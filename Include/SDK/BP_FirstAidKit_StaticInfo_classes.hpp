@@ -16,7 +16,7 @@
 SDK_NAMESPACE_START
 
 // BlueprintGeneratedClass BP_FirstAidKit_StaticInfo.BP_FirstAidKit_StaticInfo_C
-// 0x0000 (0x03A0 - 0x03A0)
+// 0x0000 (0x03B0 - 0x03B0)
 class UBP_FirstAidKit_StaticInfo_C final : public UFirstAidKitStaticInfo
 {
 public:

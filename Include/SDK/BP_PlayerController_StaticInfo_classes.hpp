@@ -16,7 +16,7 @@
 SDK_NAMESPACE_START
 
 // BlueprintGeneratedClass BP_PlayerController_StaticInfo.BP_PlayerController_StaticInfo_C
-// 0x0000 (0x02E8 - 0x02E8)
+// 0x0000 (0x02C0 - 0x02C0)
 class UBP_PlayerController_StaticInfo_C final : public UPlayerControllerStaticInfo
 {
 public:

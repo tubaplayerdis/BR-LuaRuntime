@@ -16,7 +16,7 @@
 SDK_NAMESPACE_START
 
 // BlueprintGeneratedClass BP_Sniper_StaticInfo.BP_Sniper_StaticInfo_C
-// 0x0000 (0x0810 - 0x0810)
+// 0x0000 (0x0820 - 0x0820)
 class UBP_Sniper_StaticInfo_C final : public UFirearmStaticInfo
 {
 public:

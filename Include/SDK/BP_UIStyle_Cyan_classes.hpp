@@ -17,11 +17,11 @@
 SDK_NAMESPACE_START
 
 // BlueprintGeneratedClass BP_UIStyle_Cyan.BP_UIStyle_Cyan_C
-// 0x0008 (0x7100 - 0x70F8)
+// 0x0008 (0x56B0 - 0x56A8)
 class UBP_UIStyle_Cyan_C final : public UBP_UIStyle_Default_C
 {
 public:
-	struct FPointerToUberGraphFrame               UberGraphFrame_BP_UIStyle_Cyan_C;                  // 0x70F8(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
+	struct FPointerToUberGraphFrame               UberGraphFrame_BP_UIStyle_Cyan_C;                  // 0x56A8(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
 
 public:
 	void ExecuteUbergraph_BP_UIStyle_Cyan(int32 EntryPoint);

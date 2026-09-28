@@ -14,6 +14,16 @@
 SDK_NAMESPACE_START
 SDK_PARAM_NAMESPACE_START
 
+// Function WBP_PropertiesPanel.WBP_PropertiesPanel_C.AddCategoryWidget
+// 0x0010 (0x0010 - 0x0000)
+struct WBP_PropertiesPanel_C_AddCategoryWidget final
+{
+public:
+	class UPropertyCategoryWidget*                Widget_AddCategoryWidget;                          // 0x0000(0x0008)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, InstancedReference, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	int32                                         Index_AddCategoryWidget;                           // 0x0008(0x0004)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+};
+DUMPER7_ASSERTS_WBP_PropertiesPanel_C_AddCategoryWidget;
+
 // Function WBP_PropertiesPanel.WBP_PropertiesPanel_C.ExecuteUbergraph_WBP_PropertiesPanel
 // 0x0020 (0x0020 - 0x0000)
 struct WBP_PropertiesPanel_C_ExecuteUbergraph_WBP_PropertiesPanel final
@@ -27,16 +37,6 @@ public:
 	class UVerticalBoxSlot*                       CallFunc_AddChildToVerticalBox_ReturnValue;        // 0x0018(0x0008)(ZeroConstructor, InstancedReference, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 };
 DUMPER7_ASSERTS_WBP_PropertiesPanel_C_ExecuteUbergraph_WBP_PropertiesPanel;
-
-// Function WBP_PropertiesPanel.WBP_PropertiesPanel_C.AddCategoryWidget
-// 0x0010 (0x0010 - 0x0000)
-struct WBP_PropertiesPanel_C_AddCategoryWidget final
-{
-public:
-	class UPropertyCategoryWidget*                Widget;                                            // 0x0000(0x0008)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, InstancedReference, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	int32                                         Index_0;                                           // 0x0008(0x0004)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-};
-DUMPER7_ASSERTS_WBP_PropertiesPanel_C_AddCategoryWidget;
 
 SDK_PARAM_NAMESPACE_END
 SDK_NAMESPACE_END

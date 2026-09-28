@@ -36,16 +36,15 @@ public:
 	TMulticastInlineDelegate<void()>              OnClickedClear;                                    // 0x0310(0x0010)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, BlueprintAssignable, BlueprintCallable)
 
 public:
-	void ExecuteUbergraph_WBP_PagedListHeader(int32 EntryPoint);
-	void BndEvt__WBP_PagedListHeader_ClearButton_K2Node_ComponentBoundEvent_1_OnClicked__DelegateSignature();
+	void UpdateEntry(const class FText& InTitleText_UpdateEntry, bool bInHasEntry_UpdateEntry, bool bInHasUnsavedChanges_UpdateEntry);
+	void UpdateNumObjects(int32 InNumObjects_UpdateNumObjects, int32 InMaxNumObjects_UpdateNumObjects, int32 InNumHiddenObjects_UpdateNumObjects, int32 InNumObjectsWithAerodynamics_UpdateNumObjects);
+	void UpdateDimensions(const struct FVector& InDimensions_UpdateDimensions, const struct FVector& InMaxDimensions_UpdateDimensions);
+	void UpdatePrice(float InPrice_UpdatePrice, float InMoney_UpdatePrice);
+	void UpdateMass(float InMass_UpdateMass, float InMaxMass_UpdateMass);
+	void PreConstruct(bool IsDesignTime_PreConstruct);
 	void UpdateClearButton(bool bInIsEnabled);
-	void BndEvt__WBP_PagedListHeader_ClearButton_K2Node_ComponentBoundEvent_0_OnUpdateContentStyle__DelegateSignature(EBrickUIColorStyle InColorStyle, EBrickUIStyleState InContentStyleState);
-	void PreConstruct(bool IsDesignTime);
-	void UpdateMass(float InMass, float InMaxMass);
-	void UpdatePrice(float InPrice, float InMoney);
-	void UpdateDimensions(const struct FVector& InDimensions, const struct FVector& InMaxDimensions);
-	void UpdateNumObjects(int32 InNumObjects, int32 InMaxNumObjects, int32 InNumHiddenObjects, int32 InNumObjectsWithAerodynamics);
-	void UpdateEntry(const class FText& InTitleText, bool bInHasEntry, bool bInHasUnsavedChanges);
+	void BndEvt__WBP_PagedListHeader_ClearButton_K2Node_ComponentBoundEvent_1_OnClicked__DelegateSignature();
+	void ExecuteUbergraph_WBP_PagedListHeader(int32 EntryPoint);
 
 public:
 	static class UClass* StaticClass()

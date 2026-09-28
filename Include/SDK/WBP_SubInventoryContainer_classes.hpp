@@ -16,9 +16,12 @@
 SDK_NAMESPACE_START
 
 // WidgetBlueprintGeneratedClass WBP_SubInventoryContainer.WBP_SubInventoryContainer_C
-// 0x0000 (0x0270 - 0x0270)
+// 0x0008 (0x0278 - 0x0270)
 class UWBP_SubInventoryContainer_C final : public UInventoryContainerWidget
 {
+public:
+	class UBrickImage*                            BrickImage_210;                                    // 0x0270(0x0008)(BlueprintVisible, ExportObject, ZeroConstructor, InstancedReference, IsPlainOldData, RepSkip, NoDestructor, PersistentInstance, HasGetValueTypeHash)
+
 public:
 	static class UClass* StaticClass()
 	{

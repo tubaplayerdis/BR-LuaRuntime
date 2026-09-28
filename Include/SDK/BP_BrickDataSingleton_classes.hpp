@@ -10,15 +10,19 @@
 
 #include "Basic.hpp"
 
+#include "BrickRigs_structs.hpp"
 #include "BrickRigs_classes.hpp"
 
 
 SDK_NAMESPACE_START
 
 // BlueprintGeneratedClass BP_BrickDataSingleton.BP_BrickDataSingleton_C
-// 0x0000 (0x1550 - 0x1550)
+// 0x0000 (0x16F0 - 0x16F0)
 class UBP_BrickDataSingleton_C final : public UBrickDataSingleton
 {
+public:
+	bool GetAmmoTypeDisplayInfo(const EAmmoType AmmoType, struct FDisplayInfo* OutDisplayInfo, EBrickUIColorStyle* OutColorStyle) const;
+
 public:
 	static class UClass* StaticClass()
 	{

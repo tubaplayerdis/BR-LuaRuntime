@@ -17,6 +17,34 @@
 SDK_NAMESPACE_START
 SDK_PARAM_NAMESPACE_START
 
+// Function WBP_Crosshair.WBP_Crosshair_C.PlayHitAnimation
+// 0x000C (0x000C - 0x0000)
+struct WBP_Crosshair_C_PlayHitAnimation final
+{
+public:
+	struct FClientDamageInfo                      DamageInfo_PlayHitAnimation;                       // 0x0000(0x000C)(ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, OutParm, ReferenceParm, NoDestructor)
+};
+DUMPER7_ASSERTS_WBP_Crosshair_C_PlayHitAnimation;
+
+// Function WBP_Crosshair.WBP_Crosshair_C.UpdateIsAttachingWinch
+// 0x0001 (0x0001 - 0x0000)
+struct WBP_Crosshair_C_UpdateIsAttachingWinch final
+{
+public:
+	bool                                          bNewAttaching_UpdateIsAttachingWinch;              // 0x0000(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor)
+};
+DUMPER7_ASSERTS_WBP_Crosshair_C_UpdateIsAttachingWinch;
+
+// Function WBP_Crosshair.WBP_Crosshair_C.UpdateWinchAttachment
+// 0x0002 (0x0002 - 0x0000)
+struct WBP_Crosshair_C_UpdateWinchAttachment final
+{
+public:
+	bool                                          bBlockingHit_UpdateWinchAttachment;                // 0x0000(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor)
+	bool                                          bWithinRange_UpdateWinchAttachment;                // 0x0001(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor)
+};
+DUMPER7_ASSERTS_WBP_Crosshair_C_UpdateWinchAttachment;
+
 // Function WBP_Crosshair.WBP_Crosshair_C.ExecuteUbergraph_WBP_Crosshair
 // 0x0048 (0x0048 - 0x0000)
 struct WBP_Crosshair_C_ExecuteUbergraph_WBP_Crosshair final
@@ -53,34 +81,6 @@ public:
 	EBrickUIColorStyle                            K2Node_Select_Default_4;                           // 0x0040(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 };
 DUMPER7_ASSERTS_WBP_Crosshair_C_ExecuteUbergraph_WBP_Crosshair;
-
-// Function WBP_Crosshair.WBP_Crosshair_C.UpdateWinchAttachment
-// 0x0002 (0x0002 - 0x0000)
-struct WBP_Crosshair_C_UpdateWinchAttachment final
-{
-public:
-	bool                                          bBlockingHit;                                      // 0x0000(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor)
-	bool                                          bWithinRange;                                      // 0x0001(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor)
-};
-DUMPER7_ASSERTS_WBP_Crosshair_C_UpdateWinchAttachment;
-
-// Function WBP_Crosshair.WBP_Crosshair_C.UpdateIsAttachingWinch
-// 0x0001 (0x0001 - 0x0000)
-struct WBP_Crosshair_C_UpdateIsAttachingWinch final
-{
-public:
-	bool                                          bNewAttaching;                                     // 0x0000(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor)
-};
-DUMPER7_ASSERTS_WBP_Crosshair_C_UpdateIsAttachingWinch;
-
-// Function WBP_Crosshair.WBP_Crosshair_C.PlayHitAnimation
-// 0x000C (0x000C - 0x0000)
-struct WBP_Crosshair_C_PlayHitAnimation final
-{
-public:
-	struct FClientDamageInfo                      DamageInfo;                                        // 0x0000(0x000C)(ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, OutParm, ReferenceParm, NoDestructor)
-};
-DUMPER7_ASSERTS_WBP_Crosshair_C_PlayHitAnimation;
 
 SDK_PARAM_NAMESPACE_END
 SDK_NAMESPACE_END

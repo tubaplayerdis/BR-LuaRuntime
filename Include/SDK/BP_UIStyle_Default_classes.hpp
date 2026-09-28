@@ -18,23 +18,23 @@
 SDK_NAMESPACE_START
 
 // BlueprintGeneratedClass BP_UIStyle_Default.BP_UIStyle_Default_C
-// 0x0010 (0x70F8 - 0x70E8)
+// 0x0008 (0x56A8 - 0x56A0)
 class UBP_UIStyle_Default_C : public UBrickUIStyle
 {
 public:
-	struct FPointerToUberGraphFrame               UberGraphFrame;                                    // 0x70E8(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
-	bool                                          bUseBrightBackground;                              // 0x70F0(0x0001)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor)
+	struct FPointerToUberGraphFrame               UberGraphFrame;                                    // 0x56A0(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
 
 public:
 	void ExecuteUbergraph_BP_UIStyle_Default(int32 EntryPoint);
 	void BuildStyle();
-	void SetColorStyle(EBrickUIColorStyle ColorStyle, const struct FLinearColor& DefaultColor, const struct FLinearColor& ForergoundColor, const struct FLinearColor& FocusedColor, const struct FLinearColor& FocusedForegroundColor, const struct FLinearColor& SelectedColor, const struct FLinearColor& SelectedForegroundColor);
-	void SetBrushStyle(EBrickUIBrushStyle BrushStyle, const struct FSlateBrush& Brush, const struct FSlateBrush& FocusedBrush, const struct FSlateBrush& PressedBrush, const struct FSlateBrush& SelectedBrush, const struct FSlateBrush& MarqueeBrush);
-	void BuildDefaultStyle(const struct FLinearColor& DefaultColor, const struct FLinearColor& ForegroundColor, const struct FLinearColor& HighlightColor, const struct FLinearColor& HighlightForegroundColor, const struct FLinearColor& SelectedColor, const struct FLinearColor& SelectedForegroundColor, const struct FLinearColor& LogoColor, const struct FLinearColor& LogoForegroundColor, const struct FLinearColor& LogoForegroundContrastColor);
+	void SetBrushStyle(EBrickUIBrushStyle BrushStyle, const struct FSlateBrush& Brush, const struct FSlateBrush& FocusedBrush, const struct FSlateBrush& PressedBrush, const struct FSlateBrush& MarqueeBrush);
+	void BuildDefaultStyle(const struct FLinearColor& DefaultColor, const struct FLinearColor& ForegroundColor, const struct FLinearColor& HighlightColor, const struct FLinearColor& SelectedColor);
+	void SetSimpleBrushStyle(EBrickUIBrushStyle BrushStyle, const struct FSlateBrush& Brush);
 
-	struct FTextBlockStyle MakeTextStyle(class FName Typeface, float Scale, class UObject* Font_Material, int32 OutlineSize, bool bStrike, bool bUnderline, const struct FLinearColor& ColorMultiplier) const;
+	struct FTextBlockStyle MakeTextStyle(class FName Typeface, float Scale, class UObject* Font_Material, int32 OutlineSize, bool bStrike, bool bUnderline, const struct FLinearColor& ColorMultiplier, const struct FLinearColor& Shadow_Color_and_Opacity) const;
 	struct FLinearColor MakeLiteralColor(const struct FLinearColor& Color) const;
 	void MakeDefaultColors(struct FLinearColor* Dark, struct FLinearColor* Medium, struct FLinearColor* Bright, struct FLinearColor* Negative, struct FLinearColor* Positive, struct FLinearColor* Background, struct FLinearColor* BrightBackground, struct FLinearColor* Border, struct FLinearColor* BrickRigs, struct FLinearColor* Fluppisoft, struct FLinearColor* FluppisoftForeground) const;
+	void MultiplyBrushTint(const struct FSlateBrush& Brush, float Value, struct FSlateBrush* StructOut) const;
 
 public:
 	static class UClass* StaticClass()

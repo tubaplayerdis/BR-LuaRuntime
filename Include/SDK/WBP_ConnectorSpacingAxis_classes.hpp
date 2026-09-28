@@ -36,7 +36,6 @@ public:
 	void ExecuteUbergraph_WBP_ConnectorSpacingAxis(int32 EntryPoint);
 	void UpdateSpacingAxis(EFluAxisSigned InSpacingAxis, EConnectorSpacing InSpacing);
 	void BndEvt__WBP_ConnectorSpacingAxis_Button_K2Node_ComponentBoundEvent_1_OnClicked__DelegateSignature();
-	void BndEvt__WBP_ConnectorSpacingAxis_WBP_BrickButton_K2Node_ComponentBoundEvent_0_OnUpdateContentStyle__DelegateSignature(EBrickUIColorStyle InColorStyle, EBrickUIStyleState InContentStyleState);
 
 public:
 	static class UClass* StaticClass()

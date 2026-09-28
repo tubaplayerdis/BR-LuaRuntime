@@ -12,7 +12,6 @@
 
 #include "Engine_structs.hpp"
 #include "UMG_structs.hpp"
-#include "BrickRigs_structs.hpp"
 #include "BrickRigs_classes.hpp"
 
 
@@ -31,7 +30,6 @@ public:
 
 public:
 	void ExecuteUbergraph_WBP_InventoryPopup(int32 EntryPoint);
-	void BndEvt__DropButton_K2Node_ComponentBoundEvent_0_OnUpdateContentStyle__DelegateSignature(EBrickUIColorStyle InColorStyle, EBrickUIStyleState InContentStyleState);
 	void UpdateDropArea(bool bInIsDragging, bool bInCanDrop, bool bInIsDragOver);
 
 public:

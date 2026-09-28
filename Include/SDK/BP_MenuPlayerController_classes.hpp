@@ -16,7 +16,7 @@
 SDK_NAMESPACE_START
 
 // BlueprintGeneratedClass BP_MenuPlayerController.BP_MenuPlayerController_C
-// 0x0000 (0x0630 - 0x0630)
+// 0x0000 (0x0660 - 0x0660)
 class ABP_MenuPlayerController_C final : public AMenuPlayerController
 {
 public:

@@ -16,7 +16,7 @@
 SDK_NAMESPACE_START
 
 // BlueprintGeneratedClass BP_Grenade_StaticInfo.BP_Grenade_StaticInfo_C
-// 0x0000 (0x0480 - 0x0480)
+// 0x0000 (0x0490 - 0x0490)
 class UBP_Grenade_StaticInfo_C : public UGrenadeStaticInfo
 {
 public:

@@ -16,11 +16,11 @@
 SDK_NAMESPACE_START
 
 // BlueprintGeneratedClass BP_WorldSettings.BP_WorldSettings_C
-// 0x0008 (0x04B0 - 0x04A8)
+// 0x0008 (0x04A8 - 0x04A0)
 class ABP_WorldSettings_C final : public ABrickWorldSettings
 {
 public:
-	class USceneComponent*                        DefaultSceneRoot;                                  // 0x04A8(0x0008)(BlueprintVisible, ZeroConstructor, InstancedReference, IsPlainOldData, NonTransactional, NoDestructor, HasGetValueTypeHash)
+	class USceneComponent*                        DefaultSceneRoot;                                  // 0x04A0(0x0008)(BlueprintVisible, ZeroConstructor, InstancedReference, IsPlainOldData, NonTransactional, NoDestructor, HasGetValueTypeHash)
 
 public:
 	static class UClass* StaticClass()

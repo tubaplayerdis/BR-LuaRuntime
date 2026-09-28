@@ -16,7 +16,7 @@
 SDK_NAMESPACE_START
 
 // BlueprintGeneratedClass BP_HoloSight_StaticInfo.BP_HoloSight_StaticInfo_C
-// 0x0000 (0x0400 - 0x0400)
+// 0x0000 (0x0410 - 0x0410)
 class UBP_HoloSight_StaticInfo_C final : public USightStaticInfo
 {
 public:

@@ -10,15 +10,24 @@
 
 #include "Basic.hpp"
 
+#include "Engine_structs.hpp"
 #include "BrickRigs_classes.hpp"
 
 
 SDK_NAMESPACE_START
 
 // WidgetBlueprintGeneratedClass WBP_MenuButtonPanel.WBP_MenuButtonPanel_C
-// 0x0000 (0x0290 - 0x0290)
+// 0x0010 (0x02A0 - 0x0290)
 class UWBP_MenuButtonPanel_C final : public UMenuButtonPanelWidget
 {
+public:
+	struct FPointerToUberGraphFrame               UberGraphFrame;                                    // 0x0290(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
+	bool                                          bFillWidth;                                        // 0x0298(0x0001)(Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor)
+
+public:
+	void ExecuteUbergraph_WBP_MenuButtonPanel(int32 EntryPoint);
+	void PreConstruct(bool IsDesignTime);
+
 public:
 	static class UClass* StaticClass()
 	{

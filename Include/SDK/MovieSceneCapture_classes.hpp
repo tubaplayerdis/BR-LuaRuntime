@@ -10,10 +10,10 @@
 
 #include "Basic.hpp"
 
+#include "ImageWriteQueue_structs.hpp"
 #include "MovieSceneCapture_structs.hpp"
 #include "CoreUObject_structs.hpp"
 #include "CoreUObject_classes.hpp"
-#include "ImageWriteQueue_structs.hpp"
 
 
 SDK_NAMESPACE_START

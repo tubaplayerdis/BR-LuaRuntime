@@ -11,7 +11,6 @@
 #include "Basic.hpp"
 
 #include "Engine_structs.hpp"
-#include "UMG_structs.hpp"
 #include "BrickRigs_structs.hpp"
 #include "BrickRigs_classes.hpp"
 #include "SlateCore_structs.hpp"
@@ -20,21 +19,15 @@
 SDK_NAMESPACE_START
 
 // WidgetBlueprintGeneratedClass WBP_InputAction.WBP_InputAction_C
-// 0x0018 (0x0358 - 0x0340)
+// 0x0008 (0x0360 - 0x0358)
 class UWBP_InputAction_C final : public UInputActionWidget
 {
 public:
-	struct FPointerToUberGraphFrame               UberGraphFrame;                                    // 0x0340(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
-	class UWBP_BrickButton_C*                     EditButton;                                        // 0x0348(0x0008)(BlueprintVisible, ExportObject, ZeroConstructor, InstancedReference, IsPlainOldData, RepSkip, NoDestructor, PersistentInstance, HasGetValueTypeHash)
-	class UBrickImage*                            EditImage;                                         // 0x0350(0x0008)(BlueprintVisible, ExportObject, ZeroConstructor, InstancedReference, IsPlainOldData, RepSkip, NoDestructor, PersistentInstance, HasGetValueTypeHash)
+	struct FPointerToUberGraphFrame               UberGraphFrame;                                    // 0x0358(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
 
 public:
 	void ExecuteUbergraph_WBP_InputAction(int32 EntryPoint);
-	void UpdateInputActionListMode(EInputActionListMode NewMode);
-	void UpdateCanActionBeRebound(bool bInCanBeRebound);
-	void BndEvt__EditButton_K2Node_ComponentBoundEvent_2_OnClicked__DelegateSignature();
-	void BndEvt__EditButton_K2Node_ComponentBoundEvent_1_OnUpdateContentStyle__DelegateSignature(EBrickUIColorStyle InColorStyle, EBrickUIStyleState InContentStyleState);
-	void BndEvt__Button_K2Node_ComponentBoundEvent_0_OnUpdateContentStyle__DelegateSignature(EBrickUIColorStyle InColorStyle, EBrickUIStyleState InContentStyleState);
+	void UpdateActionWidget(const struct FDisplayInfo& InDisplayInfo, const EBrickUIColorStyle ColorStyle, const bool bInIsEnabled, const bool bInIsActive, const bool bInIsClickable);
 
 	class UWidget* GetWidgetToFocus() const;
 

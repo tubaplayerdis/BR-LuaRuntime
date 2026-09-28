@@ -18,34 +18,6 @@
 
 SDK_NAMESPACE_START
 
-// Class AudioMixer.SubmixEffectReverbPreset
-// 0x00A8 (0x0110 - 0x0068)
-class USubmixEffectReverbPreset final : public USoundEffectSubmixPreset
-{
-public:
-	uint8                                         Pad_68[0x68];                                      // 0x0068(0x0068)(Fixing Size After Last Property [ Dumper-7 ])
-	struct FSubmixEffectReverbSettings            Settings;                                          // 0x00D0(0x0040)(Edit, BlueprintVisible, NoDestructor, NativeAccessSpecifierPublic)
-
-public:
-	void SetSettings(const struct FSubmixEffectReverbSettings& InSettings);
-	void SetSettingsWithReverbEffect(const class UReverbEffect* InReverbEffect, const float WetLevel, const float DryLevel);
-
-public:
-	static class UClass* StaticClass()
-	{
-		STATIC_CLASS_IMPL("SubmixEffectReverbPreset")
-	}
-	static const class FName& StaticName()
-	{
-		STATIC_NAME_IMPL(L"SubmixEffectReverbPreset")
-	}
-	static class USubmixEffectReverbPreset* GetDefaultObj()
-	{
-		return GetDefaultObjImpl<USubmixEffectReverbPreset>();
-	}
-};
-DUMPER7_ASSERTS_USubmixEffectReverbPreset;
-
 // Class AudioMixer.SynthComponent
 // 0x04C0 (0x06C0 - 0x0200)
 class USynthComponent : public USceneComponent
@@ -343,6 +315,34 @@ public:
 	}
 };
 DUMPER7_ASSERTS_USubmixEffectSubmixEQPreset;
+
+// Class AudioMixer.SubmixEffectReverbPreset
+// 0x00A8 (0x0110 - 0x0068)
+class USubmixEffectReverbPreset final : public USoundEffectSubmixPreset
+{
+public:
+	uint8                                         Pad_68[0x68];                                      // 0x0068(0x0068)(Fixing Size After Last Property [ Dumper-7 ])
+	struct FSubmixEffectReverbSettings            Settings;                                          // 0x00D0(0x0040)(Edit, BlueprintVisible, NoDestructor, NativeAccessSpecifierPublic)
+
+public:
+	void SetSettings(const struct FSubmixEffectReverbSettings& InSettings);
+	void SetSettingsWithReverbEffect(const class UReverbEffect* InReverbEffect, const float WetLevel, const float DryLevel);
+
+public:
+	static class UClass* StaticClass()
+	{
+		STATIC_CLASS_IMPL("SubmixEffectReverbPreset")
+	}
+	static const class FName& StaticName()
+	{
+		STATIC_NAME_IMPL(L"SubmixEffectReverbPreset")
+	}
+	static class USubmixEffectReverbPreset* GetDefaultObj()
+	{
+		return GetDefaultObjImpl<USubmixEffectReverbPreset>();
+	}
+};
+DUMPER7_ASSERTS_USubmixEffectReverbPreset;
 
 // Class AudioMixer.SynthSound
 // 0x0020 (0x03E0 - 0x03C0)

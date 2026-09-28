@@ -17,11 +17,11 @@
 SDK_NAMESPACE_START
 
 // WidgetBlueprintGeneratedClass WBP_WindowManager.WBP_WindowManager_C
-// 0x0008 (0x03C8 - 0x03C0)
+// 0x0008 (0x0400 - 0x03F8)
 class UWBP_WindowManager_C final : public UWindowManagerWidget
 {
 public:
-	struct FPointerToUberGraphFrame               UberGraphFrame;                                    // 0x03C0(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
+	struct FPointerToUberGraphFrame               UberGraphFrame;                                    // 0x03F8(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
 
 public:
 	void ExecuteUbergraph_WBP_WindowManager(int32 EntryPoint);

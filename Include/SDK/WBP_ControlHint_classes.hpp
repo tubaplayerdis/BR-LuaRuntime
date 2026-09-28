@@ -18,17 +18,23 @@
 SDK_NAMESPACE_START
 
 // WidgetBlueprintGeneratedClass WBP_ControlHint.WBP_ControlHint_C
-// 0x0008 (0x0360 - 0x0358)
+// 0x0018 (0x0398 - 0x0380)
 class UWBP_ControlHint_C final : public UControlHintWidget
 {
 public:
-	struct FPointerToUberGraphFrame               UberGraphFrame;                                    // 0x0358(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
+	struct FPointerToUberGraphFrame               UberGraphFrame;                                    // 0x0380(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
+	class UBrickImage*                            HoldImage;                                         // 0x0388(0x0008)(BlueprintVisible, ExportObject, ZeroConstructor, InstancedReference, IsPlainOldData, RepSkip, NoDestructor, PersistentInstance, HasGetValueTypeHash)
+	class UBrickHorizontalBox*                    InputChordBox;                                     // 0x0390(0x0008)(BlueprintVisible, ExportObject, ZeroConstructor, InstancedReference, IsPlainOldData, RepSkip, NoDestructor, PersistentInstance, HasGetValueTypeHash)
 
 public:
 	void ExecuteUbergraph_WBP_ControlHint(int32 EntryPoint);
 	void UpdateTextVisibility(bool bNewVisible);
+	void UpdatePressedKeyPadding(const float PaddingRatio);
+	void UpdateHoldProgress(float InHoldProgress);
+	void SetIconOpacity(float InOpacity);
 	void UpdateInputChordVisibility(bool bNewVisible);
 	void SetIconSize(float NewSize);
+	void UpdateIsHoldAction(bool bIsHoldAction);
 
 public:
 	static class UClass* StaticClass()

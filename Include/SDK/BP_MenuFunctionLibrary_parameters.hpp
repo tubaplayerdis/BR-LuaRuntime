@@ -79,9 +79,9 @@ public:
 };
 DUMPER7_ASSERTS_BP_MenuFunctionLibrary_C_CreateExitButton;
 
-// Function BP_MenuFunctionLibrary.BP_MenuFunctionLibrary_C.CreateContinueButton
+// Function BP_MenuFunctionLibrary.BP_MenuFunctionLibrary_C.Create Continue Button
 // 0x0030 (0x0030 - 0x0000)
-struct BP_MenuFunctionLibrary_C_CreateContinueButton final
+struct BP_MenuFunctionLibrary_C_Create_Continue_Button final
 {
 public:
 	class UMenuButtonPanelWidget*                 Widget;                                            // 0x0000(0x0008)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, InstancedReference, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
@@ -90,7 +90,7 @@ public:
 	class UMenuButtonWidget*                      ReturnValue;                                       // 0x0020(0x0008)(Parm, OutParm, ZeroConstructor, ReturnParm, InstancedReference, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 	class UMenuButtonWidget*                      CallFunc_CreateButton_ReturnValue;                 // 0x0028(0x0008)(ZeroConstructor, InstancedReference, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 };
-DUMPER7_ASSERTS_BP_MenuFunctionLibrary_C_CreateContinueButton;
+DUMPER7_ASSERTS_BP_MenuFunctionLibrary_C_Create_Continue_Button;
 
 // Function BP_MenuFunctionLibrary.BP_MenuFunctionLibrary_C.CreateRefreshButton
 // 0x0030 (0x0030 - 0x0000)

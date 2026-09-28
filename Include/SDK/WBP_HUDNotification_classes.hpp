@@ -31,7 +31,7 @@ public:
 	void PlayFadeInAnim();
 	void PlayFadeOutAnim();
 	void UpdateIsThumbnailNotification(bool bNewIsThumbnail_UpdateIsThumbnailNotification);
-	void InitializeNotification(const struct FBrickUIIconSlot& InIconSlot_InitializeNotification, const class FText& InText_InitializeNotification, EBrickUIColorStyle InColorStyle_InitializeNotification);
+	void InitializeNotification(const struct FDisplayInfo& InDisplayInfo_InitializeNotification, const EBrickUIColorStyle InColorStyle_InitializeNotification);
 	void ExecuteUbergraph_WBP_HUDNotification(int32 EntryPoint);
 
 public:

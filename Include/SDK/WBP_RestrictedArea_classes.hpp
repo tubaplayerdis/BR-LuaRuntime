@@ -29,8 +29,8 @@ public:
 	class UBrickTextBlock*                        RestrictedAreaTextBlock;                           // 0x02A0(0x0008)(BlueprintVisible, ExportObject, ZeroConstructor, InstancedReference, IsPlainOldData, RepSkip, NoDestructor, PersistentInstance, HasGetValueTypeHash)
 
 public:
-	void PlayFadeOutAnim();
 	void PlayFadeInAnim();
+	void PlayFadeOutAnim();
 	void UpdateTimerRemaining(float TimeRemaining_UpdateTimerRemaining);
 	void ExecuteUbergraph_WBP_RestrictedArea(int32 EntryPoint);
 

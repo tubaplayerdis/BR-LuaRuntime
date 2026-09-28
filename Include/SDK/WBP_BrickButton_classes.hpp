@@ -16,7 +16,7 @@
 SDK_NAMESPACE_START
 
 // WidgetBlueprintGeneratedClass WBP_BrickButton.WBP_BrickButton_C
-// 0x0000 (0x0310 - 0x0310)
+// 0x0000 (0x0308 - 0x0308)
 class UWBP_BrickButton_C final : public UBrickButtonWidget
 {
 public:

@@ -14,10 +14,10 @@
 #include "../SDK/Basic.hpp"
 #include "../SDK/BrickRigs_classes.hpp"
 #include "../SDK/UMG_classes.hpp"
-#include "../../Include/Utils/Offsets.hpp"
-#include "../../Include/Utils/GameFunctions.hpp"
-#include "../../Include/SDK/AssetRegistry_classes.hpp"
-#include "../../Include/Utils/UnrealContainers.hpp"
+#include "Offsets.hpp"
+#include "GameFunctions.hpp"
+#include "../SDK/AssetRegistry_classes.hpp"
+#include "UnrealContainers.hpp"
 
 template<typename T>
 SDK::UClass* GetClassInternal(const char* clsobjname)

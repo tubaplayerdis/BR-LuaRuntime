@@ -25,7 +25,7 @@ public:
 	static class UMenuButtonWidget* CreateConfirmButton(class UMenuButtonPanelWidget* Widget, const TDelegate<void()>& Delegate, class UObject* __WorldContext);
 	static class UMenuButtonWidget* CreateCancelButton(class UMenuButtonPanelWidget* Widget, const TDelegate<void()>& Delegate, class UObject* __WorldContext);
 	static class UMenuButtonWidget* CreateExitButton(class UMenuButtonPanelWidget* Widget, const TDelegate<void()>& Delegate, class UObject* __WorldContext);
-	static class UMenuButtonWidget* CreateContinueButton(class UMenuButtonPanelWidget* Widget, const TDelegate<void()>& Delegate, class UObject* __WorldContext);
+	static class UMenuButtonWidget* Create_Continue_Button(class UMenuButtonPanelWidget* Widget, const TDelegate<void()>& Delegate, class UObject* __WorldContext);
 	static class UMenuButtonWidget* CreateRefreshButton(class UMenuButtonPanelWidget* Widget, const TDelegate<void()>& Delegate, class UObject* __WorldContext);
 	static class UMenuButtonWidget* CreateRetryButton(class UMenuButtonPanelWidget* Widget, const TDelegate<void()>& Delegate, class UObject* __WorldContext);
 	static class UMenuButtonWidget* CreateShowProfileButton(class UMenuButtonPanelWidget* Widget, const TDelegate<void()>& Delegate, class UObject* __WorldContext);

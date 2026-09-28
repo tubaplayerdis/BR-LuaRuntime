@@ -16,7 +16,7 @@
 SDK_NAMESPACE_START
 
 // BlueprintGeneratedClass BP_FireExtinguisher_StaticInfo.BP_FireExtinguisher_StaticInfo_C
-// 0x0000 (0x04E0 - 0x04E0)
+// 0x0000 (0x04F0 - 0x04F0)
 class UBP_FireExtinguisher_StaticInfo_C final : public UFireExtinguisherStaticInfo
 {
 public:

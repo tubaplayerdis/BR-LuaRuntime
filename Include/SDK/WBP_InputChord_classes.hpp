@@ -11,7 +11,6 @@
 #include "Basic.hpp"
 
 #include "Engine_structs.hpp"
-#include "BrickRigs_structs.hpp"
 #include "BrickRigs_classes.hpp"
 
 
@@ -27,7 +26,6 @@ public:
 
 public:
 	void ExecuteUbergraph_WBP_InputChord(int32 EntryPoint);
-	void UpdateSpacerColorStyleAndStyleState(class UUserWidget* Widget, EBrickUIColorStyle NewColorStyle, EBrickUIStyleState NewStyleState);
 	void AddSpacerWidget(class UUserWidget* Widget);
 	void AddKeyWidget(class UInputKeyWidget* Widget);
 

@@ -12,8 +12,8 @@
 
 #include "Engine_structs.hpp"
 #include "UMG_structs.hpp"
-#include "BrickRigs_structs.hpp"
 #include "BrickRigs_classes.hpp"
+#include "SlateCore_structs.hpp"
 
 
 SDK_NAMESPACE_START
@@ -35,10 +35,11 @@ public:
 	void ExecuteUbergraph_WBP_BrickEditorObjectProperty(int32 EntryPoint);
 	void UpdateIsReadOnly(bool bNewReadOnly);
 	void BndEvt__WBP_BrickEditorObjectProperty_SelectButton_K2Node_ComponentBoundEvent_3_OnClicked__DelegateSignature();
-	void BndEvt__WBP_BrickEditorObjectProperty_SelectButton_K2Node_ComponentBoundEvent_2_OnUpdateContentStyle__DelegateSignature(EBrickUIColorStyle InColorStyle, EBrickUIStyleState InContentStyleState);
 	void BndEvt__WBP_BrickButton_K2Node_ComponentBoundEvent_1_OnClicked__DelegateSignature();
 	void BndEvt__PickObjectsButton_K2Node_ComponentBoundEvent_0_OnClicked__DelegateSignature();
 	void UpdateSelectedObjects(const class FText& FirstObjectName, int32 NumSelectedObjects, bool bDefaultObjects);
+
+	EHorizontalAlignment GetPropertyHorizontalAlignment() const;
 
 public:
 	static class UClass* StaticClass()

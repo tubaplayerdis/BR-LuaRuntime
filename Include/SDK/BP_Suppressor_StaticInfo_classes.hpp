@@ -16,7 +16,7 @@
 SDK_NAMESPACE_START
 
 // BlueprintGeneratedClass BP_Suppressor_StaticInfo.BP_Suppressor_StaticInfo_C
-// 0x0000 (0x03F0 - 0x03F0)
+// 0x0000 (0x0400 - 0x0400)
 class UBP_Suppressor_StaticInfo_C final : public UBarrelStaticInfo
 {
 public:
